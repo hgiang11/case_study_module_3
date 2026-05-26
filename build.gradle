@@ -1,0 +1,51 @@
+plugins {
+    id 'java'
+    id 'war'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    junitVersion = '5.13.2'
+}
+
+sourceCompatibility = '8'
+targetCompatibility = '8'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+
+
+
+dependencies {
+     implementation 'com.mysql:mysql-connector-j:8.0.33'
+
+    // Servlet API
+    compileOnly 'jakarta.servlet:jakarta.servlet-api:6.0.0'
+
+    // JSP API
+    compileOnly 'jakarta.servlet.jsp:jakarta.servlet.jsp-api:3.1.1'
+    // JSTL (Java Standard Tag Library)
+    implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:3.0.0'
+    implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.1'
+
+            testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+}
+
+test {
+    useJUnitPlatform()
+}
+
+task checkDb(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'igmini.utils.CheckDB'
+    jvmArgs = ['-Xmx32m', '-Xms32m']
+}
