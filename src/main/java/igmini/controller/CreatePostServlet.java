@@ -22,7 +22,13 @@ public class CreatePostServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Chuyển tiếp người dùng đến trang điền form đăng bài
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+
+        if (user == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
         request.getRequestDispatcher("create_post.jsp").forward(request, response);
     }
 
@@ -35,9 +41,10 @@ public class CreatePostServlet extends HttpServlet {
         User user = (User) session.getAttribute("user");
 
         if (user == null) {
-            response.sendRedirect("login.jsp");
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
+
 
         try {
             // 1. Lấy thông tin file
@@ -59,17 +66,17 @@ public class CreatePostServlet extends HttpServlet {
             // 3. Chuẩn bị đối tượng Post để lưu vào DB
             String caption = request.getParameter("caption");
             Post post = new Post();
-            post.setUserId(user.getId());
+            post.setUser_id(user.getId());
             post.setCaption(caption);
 
             // Lưu đường dẫn đầy đủ: uploads/12345_filename.jpg
-            post.setImageUrl("uploads/" + fileName);
+            post.setImage_url("uploads/" + fileName);
 
 
             PostDAO postDAO = new PostDAOImpl();
             boolean isSuccess = postDAO.createPost(post);
             if (isSuccess) {
-                response.sendRedirect("profile");
+                response.sendRedirect(request.getContextPath() + "/home");
             } else {
                 response.getWriter().println("Lỗi: Không thể lưu bài viết vào cơ sở dữ liệu.");
             }

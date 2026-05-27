@@ -58,7 +58,7 @@ public class UserDAOImpl implements igmini.dao.UserDAO {
 
     @Override
     public boolean updateUser(User user) {
-        String sql = "UPDATE users SET username = ?, email = ?, avatar_url = ? WHERE id = ?";
+        String sql = "UPDATE users SET username = ?, email = ?, avatarUrl = ? WHERE id = ?";
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, user.getUsername());
@@ -88,7 +88,7 @@ public class UserDAOImpl implements igmini.dao.UserDAO {
                     user.setUsername(rs.getString("username"));
                     user.setEmail(rs.getString("email"));
                     user.setPassword(rs.getString("password"));
-                    user.setAvatarUrl(rs.getString("avatar_url"));
+                    user.setAvatarUrl(rs.getString("avatarUrl"));
                     // Thêm các trường khác nếu bạn có (bio, phone, etc.)
                 }
             }
@@ -114,7 +114,7 @@ public class UserDAOImpl implements igmini.dao.UserDAO {
                     u.setId(rs.getInt("id"));
                     u.setUsername(rs.getString("username"));
                     u.setEmail(rs.getString("email"));
-                    u.setAvatarUrl(rs.getString("avatar_url"));
+                    u.setAvatarUrl(rs.getString("avatarUrl"));
                     list.add(u);
                 }
             }

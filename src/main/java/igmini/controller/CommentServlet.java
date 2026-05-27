@@ -1,7 +1,12 @@
 package igmini.controller;
 
 import igmini.dao.CommentDAO;
+import igmini.dao.NotificationDAO;
+import igmini.dao.PostDAO;
 import igmini.dao.impl.CommentDAOImpl;
+import igmini.dao.impl.NotificationDAOImpl;
+import igmini.dao.impl.PostDAOImpl;
+import igmini.model.Post;
 import igmini.model.User;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -11,6 +16,8 @@ import java.io.*;
 @WebServlet("/comment")
 public class CommentServlet extends HttpServlet {
 
+    private final PostDAO postDAO = new PostDAOImpl();
+    private final NotificationDAO notiDAO = new NotificationDAOImpl();
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -43,7 +50,24 @@ public class CommentServlet extends HttpServlet {
             boolean success = commentDAO.insertComment(user.getId(), post_id_comment, content);
 
 
+
             if (success) {
+                try {
+                    // Lấy thông tin bài viết dựa vào post_id_comment để tìm chủ bài viết
+                    Post post = postDAO.getPostById(post_id_comment);
+                    if (post != null) {
+                        int postOwnerId = post.getUser_id();
+                        int senderId = user.getId();
+
+
+                        notiDAO.addNotification(postOwnerId, senderId, "COMMENT", post_id_comment);
+                    }
+                } catch (Exception e) {
+                    System.out.println("Lỗi khi tạo thông báo Comment ngầm: " + e.getMessage());
+                    e.printStackTrace();
+                }
+                // --- KẾT THÚC ĐOẠN XỬ LÝ TẠO THÔNG BÁO BÌNH LUẬN NGẦM ---
+
                 response.setStatus(HttpServletResponse.SC_OK);
                 response.getWriter().write("{\"success\": true}");
             } else {

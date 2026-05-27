@@ -22,6 +22,7 @@ public class DBConnection {
             );
 
         } catch (Exception e) {
+            System.out.println("Error while connecting to the database:" + e.getMessage());
             e.printStackTrace();
         }
 

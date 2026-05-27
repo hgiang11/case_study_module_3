@@ -59,13 +59,13 @@ public class CommentDAOImpl implements CommentDAO {
                 while (rs.next()) {
                     Comment comment = new Comment();
                     comment.setId(rs.getInt("id"));
-                    comment.setUserIdComment(rs.getInt("user_id_comment"));
-                    comment.setPostIdComment(rs.getInt("post_id_comment"));
+                    comment.setUser_id_comment(rs.getInt("user_id_comment"));
+                    comment.setPost_id_comment(rs.getInt("post_id_comment"));
                     comment.setContent(rs.getString("content"));
 
                     // Xử lý an toàn tránh NullPointerException nếu created_at trống
                     if (rs.getTimestamp("created_at") != null) {
-                        comment.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+                        comment.setCreated_at(rs.getTimestamp("created_at").toLocalDateTime());
                     }
                     comment.setUsername(rs.getString("username"));
 

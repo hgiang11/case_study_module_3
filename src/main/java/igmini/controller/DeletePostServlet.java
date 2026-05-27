@@ -20,7 +20,7 @@ public class DeletePostServlet extends HttpServlet {
         HttpSession session = request.getSession();
         User currentUser = (User) session.getAttribute("user");
         if (currentUser == null) {
-            response.sendRedirect("login.jsp");
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
         // 1. Lấy ID bài viết từ URL (ví dụ: delete-post?id=10)
@@ -30,7 +30,7 @@ public class DeletePostServlet extends HttpServlet {
             try {
                 int postId = Integer.parseInt(idParam);
                 Post post = postDAO.getPostById(postId);
-                if (post != null && post.getUserId() != currentUser.getId()) {
+                if (post != null && post.getUser_id() != currentUser.getId()) {
                     response.sendError(HttpServletResponse.SC_FORBIDDEN, "Bạn không có quyền xóa bài viết này!");
                     return;
                 }
@@ -43,7 +43,7 @@ public class DeletePostServlet extends HttpServlet {
         }
 
         // 3. Xóa xong thì quay về trang Profile để thấy kết quả ngay
-        response.sendRedirect("profile");
+        response.sendRedirect(request.getContextPath() + "/profile");
     }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

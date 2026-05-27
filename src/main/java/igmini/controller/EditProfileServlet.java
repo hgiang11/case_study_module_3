@@ -27,7 +27,7 @@ public class EditProfileServlet extends HttpServlet {
         // Kiểm tra trạng thái đăng nhập bảo mật
         HttpSession session = request.getSession();
         if (session.getAttribute("user") == null) {
-            response.sendRedirect("login.jsp");
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
@@ -43,7 +43,7 @@ public class EditProfileServlet extends HttpServlet {
         User currentUser = (User) session.getAttribute("user");
 
         if (currentUser == null) {
-            response.sendRedirect("login.jsp");
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
@@ -86,7 +86,7 @@ public class EditProfileServlet extends HttpServlet {
         if (userDAO.updateUser(currentUser)) {
             // Cập nhật lại session để giao diện đổi ngay lập tức
             session.setAttribute("user", currentUser);
-            response.sendRedirect("profile");
+            response.sendRedirect(request.getContextPath() + "/profile");
         } else {
             response.getWriter().println("Lỗi cập nhật Profile!");
         }

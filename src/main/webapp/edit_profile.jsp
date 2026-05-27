@@ -12,7 +12,6 @@
 
     // Nếu chưa đăng nhập thì đẩy về trang login cho an toàn
     if (user == null) {
-        response.sendRedirect("login.jsp");
         return;
     }
 %>
@@ -246,11 +245,11 @@
             <p>Cập nhật thông tin cá nhân của bạn</p>
         </div>
 
-        <form action="edit-profile" method="post" enctype="multipart/form-data">
+        <form action="${pageContext.request.contextPath}/edit-profile" method="post" enctype="multipart/form-data">
             <div class="avatar-section">
                 <div class="avatar-circle" id="avatarPreview">
-                    <% if (user.getAvatar_url() != null && !user.getAvatar_url().isEmpty()) { %>
-                    <img src="<%= request.getContextPath() %>/<%= user.getAvatar_url() %>"
+                    <% if (user.getAvatarUrl() != null && !user.getAvatarUrl().isEmpty()) { %>
+                    <img src="${pageContext.request.contextPath}/<%= user.getAvatarUrl() %>"
                          style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
                     <% } else { %>
                     <i class="fas fa-user"></i>

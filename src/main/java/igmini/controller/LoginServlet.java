@@ -17,6 +17,11 @@ public class LoginServlet extends HttpServlet {
     private UserDAO userDAO = new UserDAOImpl();
 
     @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getRequestDispatcher("login.jsp").forward(request, response);
+    }
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String userParam = request.getParameter("username");
         String passParam = request.getParameter("password");
@@ -28,8 +33,7 @@ public class LoginServlet extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("user", account);
 
-            // Chuyển hướng về trang chủ index.jsp
-            response.sendRedirect("home");
+            response.sendRedirect(request.getContextPath() + "/home");
         } else {
             // 4. ĐĂNG NHẬP THẤT BẠI
             request.setAttribute("error", "Sai tên đăng nhập hoặc mật khẩu!");

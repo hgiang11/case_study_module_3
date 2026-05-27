@@ -277,7 +277,7 @@
             </form>
 
             <div class="back-link">
-                <a href="index.jsp"><i class="fas fa-arrow-left"></i> Quay lại trang chủ</a>
+                <a href="${pageContext.request.contextPath}/home"><i class="fas fa-arrow-left"></i> Quay lại trang chủ</a>
             </div>
         </div>
     </div>

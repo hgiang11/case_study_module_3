@@ -15,8 +15,8 @@ public class PostDAOImpl implements PostDAO {
         String sql = "INSERT INTO posts (user_id, image_url, caption) VALUES (?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, post.getUserId());
-            ps.setString(2, post.getImageUrl());
+            ps.setInt(1, post.getUser_id());
+            ps.setString(2, post.getImage_url());
             ps.setString(3, post.getCaption());
             return ps.executeUpdate() > 0;
         } catch (Exception e) {
@@ -27,32 +27,33 @@ public class PostDAOImpl implements PostDAO {
     @Override
     public List<Post> getAllPosts() {
         List<Post> list = new ArrayList<>();
-        // Thêm p.created_at vào query
-        String sql = "SELECT p.*, u.username, u.avatar_url FROM posts p " +
+        // Tên cột u.avatarUrl trùng với DB của bạn
+        String sql = "SELECT p.*, u.username, u.avatarUrl FROM posts p " +
                 "JOIN users u ON p.user_id = u.id " +
                 "ORDER BY p.created_at DESC";
 
-            try (Connection conn = DBConnection.getConnection();
-                 PreparedStatement ps = conn.prepareStatement(sql);
-                 ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    Post p = new Post();
-                    p.setId(rs.getInt("id"));
-                    p.setUserId(rs.getInt("user_id"));
-                    p.setImageUrl(rs.getString("image_url"));
-                    p.setCaption(rs.getString("caption"));
-                    p.setCreatedAt(rs.getTimestamp("created_at"));
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Post p = new Post();
+                p.setId(rs.getInt("id"));
+                p.setUser_id(rs.getInt("user_id"));
+                p.setImage_url(rs.getString("image_url"));
+                p.setCaption(rs.getString("caption"));
+                p.setCreated_at(rs.getTimestamp("created_at"));
 
-                    // QUAN TRỌNG: Gán thêm username vào object Post
-                    p.setUsername(rs.getString("username"));
-                    p.setAvatarUrl(rs.getString("avatar_url"));
+                p.setUsername(rs.getString("username"));
 
-                    list.add(p);
-                }
-        } catch (Exception e) { e.printStackTrace(); }
+                p.setAvatarUrl(rs.getString("avatarUrl"));
+
+                list.add(p);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return list;
     }
-
     @Override
     public List<Post> getPostsByUserId(int userId) {
         List<Post> list = new ArrayList<>();
@@ -64,10 +65,10 @@ public class PostDAOImpl implements PostDAO {
             while (rs.next()) {
                 Post p = new Post();
                 p.setId(rs.getInt("id"));
-                p.setImageUrl(rs.getString("image_url"));
+                p.setImage_url(rs.getString("image_url"));
                 p.setCaption(rs.getString("caption"));
-                p.setCreatedAt(rs.getTimestamp("created_at"));
-                p.setUserId(rs.getInt("user_id"));
+                p.setCreated_at(rs.getTimestamp("created_at"));
+                p.setUser_id(rs.getInt("user_id"));
                 list.add(p);
             }
         } catch (Exception e) {
@@ -101,8 +102,8 @@ public class PostDAOImpl implements PostDAO {
                 if (rs.next()) {
                     Post p = new Post();
                     p.setId(rs.getInt("id"));
-                    p.setUserId(rs.getInt("user_id"));
-                    p.setImageUrl(rs.getString("image_url"));
+                    p.setUser_id(rs.getInt("user_id"));
+                    p.setImage_url(rs.getString("image_url"));
                     p.setCaption(rs.getString("caption"));
                     return p;
                 }
@@ -117,8 +118,8 @@ public class PostDAOImpl implements PostDAO {
         String sql = "INSERT INTO posts (user_id, image_url, caption) VALUES (?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, post.getUserId());
-            ps.setString(2, post.getImageUrl());
+            ps.setInt(1, post.getUser_id());
+            ps.setString(2, post.getImage_url());
             ps.setString(3, post.getCaption());
             return ps.executeUpdate() > 0;
         } catch (Exception e) {

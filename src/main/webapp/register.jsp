@@ -95,7 +95,7 @@
                 </form>
 
                 <div class="back-link">
-                    <p><a href="index.jsp">Quay lại trang chủ</a></p>
+                    <p><a href="${pageContext.request.contextPath}/home">Quay lại trang chủ</a></p>
                 </div>
             </div>
         </div>

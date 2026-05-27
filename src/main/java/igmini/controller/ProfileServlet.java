@@ -1,7 +1,9 @@
 package igmini.controller;
 
+import igmini.dao.FollowDAO;
 import igmini.dao.PostDAO;
 import igmini.dao.UserDAO;
+import igmini.dao.impl.FollowDAOImpl;
 import igmini.dao.impl.PostDAOImpl;
 import igmini.dao.impl.UserDAOImpl;
 import igmini.model.Post;
@@ -20,25 +22,23 @@ import java.util.List;
 public class ProfileServlet extends HttpServlet {
     private PostDAO postDAO = new PostDAOImpl();
     private UserDAO userDAO = new UserDAOImpl();
+    private FollowDAO followDAO = new FollowDAOImpl();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
 
-        // 1. Khai báo biến currentUser lấy từ session
         User currentUser = (User) session.getAttribute("user");
 
         if (currentUser == null) {
-            response.sendRedirect("login.jsp");
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
-        // 2. Khai báo biến profileUser để sử dụng xuyên suốt phương thức
         User profileUser = null;
         String userIDParam = request.getParameter("userId");
 
-        // 3. Sửa lại logic kiểm tra: Nếu CÓ tham số userID thì mới đi tìm người khác
         if (userIDParam != null && !userIDParam.isEmpty()) {
             try {
                 int targetId = Integer.parseInt(userIDParam);
@@ -47,7 +47,6 @@ public class ProfileServlet extends HttpServlet {
                 profileUser = currentUser; // Nếu ID sai định dạng thì xem chính mình
             }
         } else {
-            // 4. Nếu không có tham số -> Xem chính mình
             profileUser = currentUser;
         }
 
@@ -58,6 +57,17 @@ public class ProfileServlet extends HttpServlet {
 
         // 5. Lấy danh sách bài viết của người được xem (profileUser)
         List<Post> userPosts = postDAO.getPostsByUserId(profileUser.getId());
+
+
+        boolean isFollowing = followDAO.isFollowing(currentUser.getId(), profileUser.getId());
+        request.setAttribute("isFollowing", isFollowing);
+
+        int followerCount = followDAO.getFollowerCount(profileUser.getId());
+        int followingCount = followDAO.getFollowingCount(profileUser.getId());
+
+        request.setAttribute("followerCount", followerCount);
+        request.setAttribute("followingCount", followingCount);
+
 
         // Gửi thông tin sang trang JSP
         request.setAttribute("profileUser", profileUser);

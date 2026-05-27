@@ -1,7 +1,12 @@
 package igmini.controller;
 
 import igmini.dao.LikeDAO;
+import igmini.dao.PostDAO;
+import igmini.dao.NotificationDAO;
 import igmini.dao.impl.LikeDAOImpl;
+import igmini.dao.impl.PostDAOImpl;
+import igmini.dao.impl.NotificationDAOImpl;
+import igmini.model.Post;             
 import igmini.model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -15,6 +20,8 @@ import java.io.PrintWriter;
 @WebServlet(name = "LikeServlet", value = "/like")
 public class LikeServlet extends HttpServlet {
     private final LikeDAO likeDAO = new LikeDAOImpl();
+    private final PostDAO postDAO = new PostDAOImpl(); // Khai báo đối tượng lấy bài viết
+    private final NotificationDAO notiDAO = new NotificationDAOImpl(); // Khai báo đối tượng tạo thông báo
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -31,7 +38,7 @@ public class LikeServlet extends HttpServlet {
                     out.print("{\"error\":\"unauthorized\"}");
                 }
             } else {
-                response.sendRedirect("login.jsp");
+                response.sendRedirect(request.getContextPath() + "/login");
             }
             return;
         }
@@ -48,6 +55,24 @@ public class LikeServlet extends HttpServlet {
             } else {
                 likeDAO.insertLike(userId, postId);
                 isLikedNow = true;  // Trạng thái sau khi bấm là LIKE
+
+                // --- BẮT ĐẦU ĐOẠN XỬ LÝ TẠO THÔNG BÁO NGẦM ---
+                try {
+                    // Tìm chi tiết bài viết xem chủ bài viết là ai để gửi thông báo
+                    Post post = postDAO.getPostById(postId);
+                    if (post != null) {
+                        int postOwnerId = post.getUser_id(); // Lấy ID của chủ bài viết (Người nhận)
+                        int senderId = user.getId();         // Lấy ID của người vừa bấm Like (Người gửi)
+
+                        // Tiến hành lưu thông báo vào Database
+                        // Hàm addNotification đã tự chặn cấu hình: nếu postOwnerId == senderId (tự like bài mình) thì sẽ không lưu thông báo.
+                        notiDAO.addNotification(postOwnerId, senderId, "LIKE", postId);
+                    }
+                } catch (Exception e) {
+                    System.out.println("Lỗi khi tạo thông báo Like ngầm: " + e.getMessage());
+                    e.printStackTrace();
+                }
+                // --- KẾT THÚC ĐOẠN XỬ LÝ TẠO THÔNG BÁO NGẦM ---
             }
 
             // 3. Trả về dữ liệu dạng JSON nếu là cuộc gọi AJAX ngầm từ giao diện
@@ -69,6 +94,6 @@ public class LikeServlet extends HttpServlet {
         }
 
         // 4. Nếu là click trực tiếp không qua AJAX (Dùng làm phương án backup), quay về trang home
-        response.sendRedirect("home");
+        response.sendRedirect(request.getContextPath() + "/home");
     }
 }

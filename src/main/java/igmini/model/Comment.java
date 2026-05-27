@@ -4,22 +4,22 @@ import java.time.LocalDateTime;
 
 public class Comment {
     private int id;
-    private int userIdComment;
-    private int postIdComment;
+    private int user_id_comment;
+    private int post_id_comment;
     private String content;
-    private LocalDateTime createdAt;
+    private LocalDateTime created_at;
     private String username; // Từ JOIN bảng users
 
 
     public Comment() {
     }
 
-    public Comment(int id, int userIdComment, int postIdComment, String content, LocalDateTime createdAt) {
+    public Comment(int id, int user_id_comment, int post_id_comment, String content, LocalDateTime created_at) {
         this.id = id;
-        this.userIdComment = userIdComment;
-        this.postIdComment = postIdComment;
+        this.user_id_comment = user_id_comment;
+        this.post_id_comment = post_id_comment;
         this.content = content;
-        this.createdAt = createdAt;
+        this.created_at = created_at;
     }
 
 
@@ -31,20 +31,20 @@ public class Comment {
         this.id = id;
     }
 
-    public int getUserIdComment() {
-        return userIdComment;
+    public int getUser_id_comment() {
+        return user_id_comment;
     }
 
-    public void setUserIdComment(int userIdComment) {
-        this.userIdComment = userIdComment;
+    public void setUser_id_comment(int user_id_comment) {
+        this.user_id_comment = user_id_comment;
     }
 
-    public int getPostIdComment() {
-        return postIdComment;
+    public int getPost_id_comment() {
+        return post_id_comment;
     }
 
-    public void setPostIdComment(int postIdComment) {
-        this.postIdComment = postIdComment;
+    public void setPost_id_comment(int post_id_comment) {
+        this.post_id_comment = post_id_comment;
     }
 
     public String getContent() {
@@ -55,12 +55,12 @@ public class Comment {
         this.content = content;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public LocalDateTime getCreated_at() {
+        return created_at;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public void setCreated_at(LocalDateTime created_at) {
+        this.created_at = created_at;
     }
 
     public String getUsername() {

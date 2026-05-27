@@ -18,14 +18,14 @@
             %>
             <li class="list-group-item d-flex align-items-center justify-content-between py-3">
                 <div class="d-flex align-items-center">
-                    <img src="<%= u.getAvatar_url() != null ? u.getAvatar_url() : "assets/default-avatar.png" %>"
+                    <img src="${pageContext.request.contextPath}/<%= u.getAvatarUrl() != null ? u.getAvatarUrl() : "assets/default-avatar.png" %>"
                          class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;">
                     <div>
                         <h6 class="mb-0 fw-bold"><%= u.getUsername() %></h6>
                         <small class="text-muted"><%= u.getEmail() %></small>
                     </div>
                 </div>
-                <a href="profile?id=<%= u.getId() %>" class="btn btn-sm btn-outline-primary">Xem trang cá nhân</a>
+                <a href="${pageContext.request.contextPath}/profile?userId=<%= u.getId() %>" class="btn btn-sm btn-outline-primary">Xem trang cá nhân</a>
             </li>
             <%
                 }

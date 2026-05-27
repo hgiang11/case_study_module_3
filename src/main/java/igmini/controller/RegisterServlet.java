@@ -15,6 +15,11 @@ import java.io.IOException;
 public class RegisterServlet extends HttpServlet {
     private UserDAO userDAO = new UserDAOImpl();
 
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getRequestDispatcher("register.jsp").forward(request, response);
+    }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String user = request.getParameter("username");
         String email = request.getParameter("email");
@@ -27,11 +32,10 @@ public class RegisterServlet extends HttpServlet {
         // 4. Thông báo kết quả
         if (isSuccess) {
             request.setAttribute("successMessage", "Đăng ký thành công! Chào mừng bạn đến với Mini Instagram.");
+            response.sendRedirect(request.getContextPath() + "/login");
         } else {
             request.setAttribute("errorMessage", "Có lỗi xảy ra, vui lòng thử lại!");
+            request.getRequestDispatcher("register.jsp").forward(request, response);
         }
-
-        // Forward về register.jsp để hiển thị modal
-        request.getRequestDispatcher("register.jsp").forward(request, response);
     }
 }
