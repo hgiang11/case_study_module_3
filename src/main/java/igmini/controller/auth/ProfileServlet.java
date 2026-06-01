@@ -55,19 +55,27 @@ public class ProfileServlet extends HttpServlet {
             return;
         }
 
-        // 5. Lấy danh sách bài viết của người được xem (profileUser)
-        List<Post> userPosts = postDAO.getPostsByUserId(profileUser.getId());
+        // 🔥 FIX BUG: Kiểm tra nếu tài khoản đang bị khóa (is_active = false)
+        // và người đang xem KHÔNG PHẢI là chính họ (để tránh tự block chính mình nếu lỡ có lỗi xảy ra)
+        if (!profileUser.isActive() && currentUser.getId() != profileUser.getId()) {
+            // Đặt thông báo lỗi gửi sang trang chủ
+            request.setAttribute("error", "Tài khoản này đã bị khóa hoặc tạm dừng hoạt động!");
+            // Điều hướng đá văng người xem về lại trang chủ Home
+            request.getRequestDispatcher("/home").forward(request, response);
+            return;
+        }
 
+        // 5. Lấy danh sách bài viết của người được xem (profileUser)
+        List<Post> userPosts = postDAO.getPostsByUserId( profileUser.getId());
 
         boolean isFollowing = followDAO.isFollowing(currentUser.getId(), profileUser.getId());
-        request.setAttribute("isFollowing", isFollowing);
+        request.setAttribute("isFollowing", Boolean.valueOf(isFollowing));
 
         int followerCount = followDAO.getFollowerCount(profileUser.getId());
         int followingCount = followDAO.getFollowingCount(profileUser.getId());
 
         request.setAttribute("followerCount", followerCount);
         request.setAttribute("followingCount", followingCount);
-
 
         // Gửi thông tin sang trang JSP
         request.setAttribute("profileUser", profileUser);

@@ -29,6 +29,12 @@ public class LoginServlet extends HttpServlet {
         User account = userDAO.checkLogin(userParam, passParam);
 
         if (account != null) {
+            // KIỂM TRA NẾU TÀI KHOẢN ĐÃ BỊ ADMIN KHÓA TRƯỚC ĐÓ
+            if (!account.isActive()) {
+                request.setAttribute("error", "Tài khoản của bạn đã bị khóa bởi Ban Quản Trị!");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            }
             // Tạo Session để "ghi nhớ" người dùng đã đăng nhập
             HttpSession session = request.getSession();
             session.setAttribute("user", account);

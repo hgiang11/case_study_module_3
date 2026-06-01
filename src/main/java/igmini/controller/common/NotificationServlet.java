@@ -1,4 +1,4 @@
-package igmini.controller;
+package igmini.controller.post;
 
 import igmini.dao.NotificationDAO;
 import igmini.dao.impl.NotificationDAOImpl;
