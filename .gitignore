@@ -40,4 +40,16 @@ bin/
 .vscode/
 
 ### Mac OS ###
-.DS_Store
+.DS_Storesrc/main/resources/db.properties
+
+
+# Chặn các file crash log của Java
+*.log
+hs_err_pid*
+replay_pid*
+
+# Chặn thư mục cấu hình của IntelliJ
+.idea/
+*.iml
+out/
+build/
