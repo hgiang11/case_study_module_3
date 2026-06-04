@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="igmini.model.User" %>
 <%@ page import="igmini.model.Post" %>
 <%@ page import="java.util.List" %>
@@ -13,7 +14,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: white ;
             min-height: 100vh;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
@@ -21,10 +22,11 @@
         .profile-container {
             background: white;
             border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
             margin: 30px auto;
             overflow: hidden;
             animation: slideUp 0.6s ease-out;
+            max-width: 935px; /* Giới hạn độ rộng chuẩn Instagram */
         }
 
         @keyframes slideUp {
@@ -32,24 +34,27 @@
             to { transform: translateY(0); opacity: 1; }
         }
 
+        /* 🔴 ĐỔI MÀU BACKGROUND HEADER SANG GRADIENT ĐỒNG BỘ TRANG HOME */
         .profile-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #ff1f5a 0%, #ff5e3a 100%);
             color: white;
             padding: 40px 30px;
             text-align: center;
         }
 
+        /* Vòng tròn Avatar tinh chỉnh */
         .avatar {
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            background: #ffffff; /* Đổi sang nền trắng để nổi bật ảnh đại diện */
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 48px;
             margin: 0 auto 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border: 4px solid rgba(255, 255, 255, 0.3);
         }
 
         .stats {
@@ -78,6 +83,7 @@
             padding: 30px;
         }
 
+        /* GIỮ NGUYÊN HIỆU ỨNG ĐỔ BÓNG VÀ HOVER MƯỢT MÀ CỦA BẠN */
         .post-card {
             background: white;
             border-radius: 15px;
@@ -111,6 +117,7 @@
             color: #333;
             line-height: 1.6;
             margin-bottom: 10px;
+            font-weight: 500;
         }
 
         .post-date {
@@ -130,23 +137,49 @@
             opacity: 0.5;
         }
 
-        .navbar {
-            background: #000 !important;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-            border-bottom: 1px solid #262626;
+        /* Ép màu đen tuyền tuyệt đối cho class navbar-dark của Bootstrap */
+        .navbar-dark {
+            background-color: #000000 !important;
+            background: #000000 !important; /* Chặn hoàn toàn màu gradient từ body */
+            border-bottom: 1px solid #262626 !important; /* Viền xám mảnh dưới chân giống Instagram */
+            padding: 12px 0 !important;
+            opacity: 1 !important; /* Đảm bảo không bị mờ hay trong suốt */
         }
 
+        /* Đảm bảo chữ logo luôn trắng sáng */
+        .navbar-dark .navbar-brand {
+            color: #ffffff !important;
+            font-weight: 800 !important;
+            font-size: 22px !important;
+        }
+
+        /* Đảm bảo các nút Đăng bài, Đăng xuất luôn có màu trắng và rõ nét */
+        .navbar-dark .navbar-nav .nav-link {
+            color: #ffffff !important;
+            font-weight: 600 !important;
+            transition: opacity 0.2s;
+        }
+
+        /* Hiệu ứng mờ nhẹ khi di chuột vào nút cho chuyên nghiệp */
+        .navbar-dark .navbar-nav .nav-link:hover {
+            opacity: 0.8 !important;
+            color: #ffffff !important;
+        }
+
+        /* 🔴 NÚT BAM GRADIENT ĐỒNG BỘ MÀU CAM HỒNG TRANG HOME */
         .btn-gradient {
-            background: #0095f6;
+            background: linear-gradient(45deg, #ff1f5a, #ff5e3a);
             border: none;
-            color: white;
-            padding: 12px 30px;
+            color: white !important;
+            padding: 10px 25px;
             border-radius: 25px;
+            font-weight: 600;
             transition: all 0.3s ease;
         }
 
         .btn-gradient:hover {
-            background: #0077cc;
+            opacity: 0.9;
+            box-shadow: 0 4px 15px rgba(255, 31, 90, 0.4);
         }
     </style>
 </head>
@@ -203,10 +236,12 @@
             <h2><%= profileUser.getUsername() %></h2>
             <p class="mb-3"><%= profileUser.getEmail() %></p>
 
-            <%-- BƯỚC 3: KIỂM TRA QUYỀN ĐÃ ĐƯỢC TỐI ƯU THEO DÕI / ĐANG THEO DÕI --%>
             <% if (isMyProfile) { %>
             <a href="${pageContext.request.contextPath}/edit-profile" class="btn btn-sm btn-light mb-3" style="border-radius: 20px; font-weight: 600;">
                 <i class="fas fa-edit"></i> Chỉnh sửa trang cá nhân
+            </a>
+            <a href="${pageContext.request.contextPath}/change-password" class="btn btn-sm btn-light mb-3" style="border-radius: 20px; font-weight: 600;">
+                <i class="fas fa-key"></i> Đổi mật khẩu
             </a>
             <% } else {
                 boolean isFollowing = false;
@@ -263,12 +298,22 @@
                                     <i class="far fa-calendar"></i> <%= (post.getCreated_at() != null) ? post.getCreated_at().toString().substring(0, 10) : "Mới đây" %>
                                 </small>
                                 <% if (isMyProfile) { %>
-                                <a href="${pageContext.request.contextPath}/delete-post?id=<%= post.getId() %>"
-                                   class="btn btn-outline-danger btn-sm"
-                                   style="border-radius: 10px; padding: 2px 10px;"
-                                   onclick="return confirm('Bạn có chắc muốn xóa khoảnh khắc này không?')">
-                                    <i class="fas fa-trash-alt" style="font-size: 12px;"></i> Xóa
-                                </a>
+                                <div class="d-flex align-items-center gap-2" style="position: relative; z-index: 10; display: flex !important;">
+
+                                    <a href="${pageContext.request.contextPath}/edit-post?id=<%= post.getId() %>"
+                                       class="btn btn-outline-primary btn-sm m-0"
+                                       style="border-radius: 10px; padding: 2px 10px; font-size: 13px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center;">
+                                        <i class="fas fa-edit me-1" style="font-size: 12px;"></i> Sửa
+                                    </a>
+
+                                    <form action="${pageContext.request.contextPath}/delete-post" method="POST" class="m-0 p-0" style="display: inline-block !important;">
+                                        <input type="hidden" name="id" value="<%= post.getId() %>">
+                                        <button type="submit" class="btn btn-outline-danger btn-sm m-0" style="border-radius: 10px; padding: 2px 10px; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center;">
+                                            <i class="fas fa-trash-alt me-1" style="font-size: 12px;"></i> Xóa
+                                        </button>
+                                    </form>
+
+                                </div>
                                 <% } %>
                             </div>
                         </div>

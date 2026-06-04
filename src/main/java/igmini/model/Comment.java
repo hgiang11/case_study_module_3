@@ -8,7 +8,7 @@ public class Comment {
     private int post_id_comment;
     private String content;
     private LocalDateTime created_at;
-    private String username; // Từ JOIN bảng users
+    private String username;
 
 
     public Comment() {

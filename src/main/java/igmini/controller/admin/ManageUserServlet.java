@@ -1,4 +1,4 @@
-package igmini.controller;
+package igmini.controller.admin;
 
 import igmini.dao.UserDAO;
 import igmini.dao.impl.UserDAOImpl;
@@ -17,19 +17,16 @@ public class ManageUserServlet extends HttpServlet {
         HttpSession session = request.getSession();
         User currentUser = (User) session.getAttribute("user");
 
-        // PHÂN QUYỀN: Nếu chưa đăng nhập hoặc không phải ADMIN -> Đá về trang Home hoặc Login
         if (currentUser == null || !"ADMIN".equals(currentUser.getRole())) {
             response.sendRedirect(request.getContextPath() + "/home");
             return;
         }
 
-        // Xử lý hành động thay đổi trạng thái Khóa/Mở khóa nếu có request gửi lên
         String action = request.getParameter("action");
         String userIdStr = request.getParameter("id");
 
         if (action != null && userIdStr != null) {
             int userId = Integer.parseInt(userIdStr);
-            // Ngăn việc Admin tự khóa chính mình
             if (userId != currentUser.getId()) {
                 if ("toggleStatus".equals(action)) {
                     boolean currentStatus = Boolean.parseBoolean(request.getParameter("status"));
@@ -40,12 +37,10 @@ public class ManageUserServlet extends HttpServlet {
                     userDAO.updateUserRole(userId, newRole);
                 }
             }
-            // Thực hiện xong thì redirect lại trang để cập nhật dữ liệu mới nhất
             response.sendRedirect(request.getContextPath() + "/admin/users");
             return;
         }
 
-        // Lấy danh sách toàn bộ người dùng để hiển thị lên bảng điều khiển
         List<User> allUsers = userDAO.getAllUsers();
         request.setAttribute("allUsers", allUsers);
 

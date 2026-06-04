@@ -5,12 +5,16 @@ import java.util.List;
 
 
 public interface PostDAO {
-    boolean insertPost(Post post);
     List<Post> getAllPosts();
-    List<Post> getPostsByUserId(int userId);
-    boolean deletePost(int postId);
+    List<Post> getPostsByUserId(int user_id);
+    boolean deletePost(int post_id);
     Post getPostById(int id);
     boolean createPost(Post post);
 
+    List<Post> getAllPostsForAdmin();
+    List<Post> getReportedPosts();
 
+    boolean deletePostByAdmin(int post_id);
+
+    boolean updatePost(Post post);
 }

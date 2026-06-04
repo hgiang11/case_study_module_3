@@ -36,8 +36,16 @@ dependencies {
     implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:3.0.0'
     implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.1'
 
-            testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
+
+//     thư viện mã hóa mật khẩu bcrypt
+    implementation 'org.mindrot:jbcrypt:0.4'
+
+
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+
+
 }
 
 test {

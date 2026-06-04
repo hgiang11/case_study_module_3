@@ -32,6 +32,19 @@ public class AuthFilter implements Filter {
 
         boolean loggedIn = (session != null && session.getAttribute("user") != null);
 
+        // Kiểm tra quyền ADMIN cho các đường dẫn /admin/
+        if (path.startsWith("/admin/")) {
+            if (!loggedIn) {
+                res.sendRedirect(contextPath + "/login");
+                return;
+            }
+            igmini.model.User currentUser = (igmini.model.User) session.getAttribute("user");
+            if (!"ADMIN".equals(currentUser.getRole())) {
+                res.sendError(HttpServletResponse.SC_FORBIDDEN, "Bạn không có quyền truy cập trang quản trị!");
+                return;
+            }
+        }
+
         if (loggedIn || isLoginPage || isRegisterPage || isStaticResources) {
             chain.doFilter(request, response);
         } else {

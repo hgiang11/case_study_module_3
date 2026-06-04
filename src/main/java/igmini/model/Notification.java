@@ -7,11 +7,10 @@ public class Notification {
     private int userId;
     private int senderId;
     private String type;
-    private Integer postId; // Dùng Integer để có thể nhận giá trị null (khi follow)
+    private Integer postId; // dùng Integer để có thể nhận giá trị null (khi follow)
     private boolean isRead;
     private Timestamp createdAt;
 
-    // Các thuộc tính phụ để hiển thị lên giao diện cho dễ
     private String senderUsername;
     private String senderAvatarUrl;
 

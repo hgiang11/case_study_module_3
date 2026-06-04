@@ -1,4 +1,4 @@
-package igmini.controller;
+package igmini.controller.auth;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

@@ -1,4 +1,4 @@
-package igmini.controller.post;
+package igmini.controller.common;
 
 import igmini.dao.NotificationDAO;
 import igmini.dao.impl.NotificationDAOImpl;
@@ -26,11 +26,9 @@ public class NotificationServlet extends HttpServlet {
             return;
         }
 
-        // Lấy toàn bộ thông báo ra
         List<Notification> notiList = notiDAO.getNotificationsByUserId(currentUser.getId());
         request.setAttribute("notiList", notiList);
 
-        // Xem xong thì tự động đánh dấu tất cả là đã đọc
         notiDAO.markAsRead(currentUser.getId());
 
         request.getRequestDispatcher("notifications.jsp").forward(request, response);

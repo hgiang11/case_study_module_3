@@ -1,4 +1,4 @@
-package igmini.controller;
+package igmini.controller.admin;
 
 import igmini.dao.PostDAO;
 import igmini.dao.impl.PostDAOImpl;
@@ -19,20 +19,17 @@ public class ManagePostServlet extends HttpServlet {
         HttpSession session = request.getSession();
         User currentUser = (User) session.getAttribute("user");
 
-        // PHÂN QUYỀN BẢO MẬT: Chỉ ADMIN mới được vào phá
         if (currentUser == null || !"ADMIN".equals(currentUser.getRole())) {
             response.sendRedirect(request.getContextPath() + "/home");
             return;
         }
 
-        // Kiểm tra xem Admin có ấn nút XÓA bài viết hay không
         String action = request.getParameter("action");
         String postIdStr = request.getParameter("id");
 
         if ("delete".equals(action) && postIdStr != null) {
             int postId = Integer.parseInt(postIdStr);
             postDAO.deletePostByAdmin(postId);
-            // Xóa xong điều hướng tải lại trang Quản lý bài viết để cập nhật giao diện ngay
             response.sendRedirect(request.getContextPath() + "/admin/posts");
             return;
         }

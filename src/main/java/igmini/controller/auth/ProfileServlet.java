@@ -1,4 +1,4 @@
-package igmini.controller;
+package igmini.controller.auth;
 
 import igmini.dao.FollowDAO;
 import igmini.dao.PostDAO;
@@ -44,7 +44,7 @@ public class ProfileServlet extends HttpServlet {
                 int targetId = Integer.parseInt(userIDParam);
                 profileUser = userDAO.getUserById(targetId);
             } catch (NumberFormatException e) {
-                profileUser = currentUser; // Nếu ID sai định dạng thì xem chính mình
+                profileUser = currentUser;
             }
         } else {
             profileUser = currentUser;
@@ -55,17 +55,12 @@ public class ProfileServlet extends HttpServlet {
             return;
         }
 
-        // 🔥 FIX BUG: Kiểm tra nếu tài khoản đang bị khóa (is_active = false)
-        // và người đang xem KHÔNG PHẢI là chính họ (để tránh tự block chính mình nếu lỡ có lỗi xảy ra)
         if (!profileUser.isActive() && currentUser.getId() != profileUser.getId()) {
-            // Đặt thông báo lỗi gửi sang trang chủ
             request.setAttribute("error", "Tài khoản này đã bị khóa hoặc tạm dừng hoạt động!");
-            // Điều hướng đá văng người xem về lại trang chủ Home
             request.getRequestDispatcher("/home").forward(request, response);
             return;
         }
 
-        // 5. Lấy danh sách bài viết của người được xem (profileUser)
         List<Post> userPosts = postDAO.getPostsByUserId( profileUser.getId());
 
         boolean isFollowing = followDAO.isFollowing(currentUser.getId(), profileUser.getId());
@@ -77,7 +72,6 @@ public class ProfileServlet extends HttpServlet {
         request.setAttribute("followerCount", followerCount);
         request.setAttribute("followingCount", followingCount);
 
-        // Gửi thông tin sang trang JSP
         request.setAttribute("profileUser", profileUser);
         request.setAttribute("userPosts", userPosts);
 

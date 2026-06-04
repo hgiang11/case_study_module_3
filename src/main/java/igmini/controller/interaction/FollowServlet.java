@@ -1,4 +1,4 @@
-package igmini.controller;
+package igmini.controller.interaction;
 
 import igmini.dao.FollowDAO;
 import igmini.dao.NotificationDAO;    // NHỚ THÊM IMPORT NÀY

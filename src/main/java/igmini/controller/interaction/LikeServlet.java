@@ -1,4 +1,4 @@
-package igmini.controller;
+package igmini.controller.interaction;
 
 import igmini.dao.LikeDAO;
 import igmini.dao.PostDAO;

@@ -13,13 +13,7 @@ import java.util.List;
 
 public class CommentDAOImpl implements CommentDAO {
 
-    /**
-     * Hàm lưu bình luận mới vào DB
-     * @param userId ID của user viết comment
-     * @param postId ID của bài viết
-     * @param content Nội dung bình luận
-     * @return true nếu thêm thành công, false nếu thất bại
-     */
+
     @Override
     public boolean insertComment(int userId, int postId, String content) {
         String sql = "INSERT INTO comments (user_id_comment, post_id_comment, content) VALUES (?, ?, ?)";
@@ -35,11 +29,7 @@ public class CommentDAOImpl implements CommentDAO {
         }
     }
 
-    /**
-     * Hàm lấy danh sách bình luận của 1 bài viết (JOIN với username)
-     * @param postId ID của bài viết
-     * @return List<Comment> danh sách bình luận (có kèm username)
-     */
+
     @Override
     public List<Comment> getCommentsByPostId(int postId) {
         List<Comment> commentList = new ArrayList<>();
@@ -79,11 +69,7 @@ public class CommentDAOImpl implements CommentDAO {
         return commentList;
     }
 
-    /**
-     * Hàm xóa bình luận
-     * @param commentId ID của bình luận cần xóa
-     * @return true nếu xóa thành công, false nếu thất bại
-     */
+
     @Override
     public boolean deleteComment(int commentId) {
         String sql = "DELETE FROM comments WHERE id = ?";
@@ -97,11 +83,7 @@ public class CommentDAOImpl implements CommentDAO {
         }
     }
 
-    /**
-     * Hàm lấy số lượng bình luận của 1 bài viết
-     * @param postId ID của bài viết
-     * @return Số lượt comment, 0 nếu không có
-     */
+
     @Override
     public int getCommentCount(int postId) {
         String sql = "SELECT COUNT(*) AS cnt FROM comments WHERE post_id_comment = ?";

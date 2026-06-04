@@ -6,13 +6,13 @@ import igmini.utils.DBConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class NotificationDAOImpl implements NotificationDAO {
     @Override
     public boolean addNotification(int userId, int senderId, String type, Integer postId) {
-        // Nếu tự mình tương tác với bài viết của mình thì không tạo thông báo
         if (userId == senderId) return false;
 
         String sql = "INSERT INTO notifications (user_id, sender_id, type, post_id) VALUES (?, ?, ?, ?)";
@@ -27,7 +27,7 @@ public class NotificationDAOImpl implements NotificationDAO {
                 ps.setNull(4, java.sql.Types.INTEGER);
             }
             return ps.executeUpdate() > 0;
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (SQLException e) { e.printStackTrace(); }
         return false;
     }
 
@@ -47,10 +47,8 @@ public class NotificationDAOImpl implements NotificationDAO {
                     n.setUserId(rs.getInt("user_id"));
                     n.setSenderId(rs.getInt("sender_id"));
                     n.setType(rs.getString("type"));
-
                     int pId = rs.getInt("post_id");
                     n.setPostId(rs.wasNull() ? null : pId);
-
                     n.setRead(rs.getBoolean("is_read"));
                     n.setCreatedAt(rs.getTimestamp("created_at"));
                     n.setSenderUsername(rs.getString("username"));
@@ -58,7 +56,7 @@ public class NotificationDAOImpl implements NotificationDAO {
                     list.add(n);
                 }
             }
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (SQLException e) { e.printStackTrace(); }
         return list;
     }
 
@@ -69,7 +67,7 @@ public class NotificationDAOImpl implements NotificationDAO {
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userId);
             return ps.executeUpdate() > 0;
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (SQLException e) { e.printStackTrace(); }
         return false;
     }
 }

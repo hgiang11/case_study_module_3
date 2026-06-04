@@ -1,5 +1,6 @@
-package igmini.controller;
+package igmini.controller.auth;
 
+import org.mindrot.jbcrypt.BCrypt;
 import igmini.dao.UserDAO;
 import igmini.dao.impl.UserDAOImpl;
 import igmini.model.User;
@@ -29,19 +30,16 @@ public class LoginServlet extends HttpServlet {
         User account = userDAO.checkLogin(userParam, passParam);
 
         if (account != null) {
-            // KIỂM TRA NẾU TÀI KHOẢN ĐÃ BỊ ADMIN KHÓA TRƯỚC ĐÓ
             if (!account.isActive()) {
                 request.setAttribute("error", "Tài khoản của bạn đã bị khóa bởi Ban Quản Trị!");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             }
-            // Tạo Session để "ghi nhớ" người dùng đã đăng nhập
             HttpSession session = request.getSession();
             session.setAttribute("user", account);
 
             response.sendRedirect(request.getContextPath() + "/home");
         } else {
-            // 4. ĐĂNG NHẬP THẤT BẠI
             request.setAttribute("error", "Sai tên đăng nhập hoặc mật khẩu!");
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }

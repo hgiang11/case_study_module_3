@@ -1,4 +1,4 @@
-package igmini.controller;
+package igmini.controller.auth;
 
 import igmini.dao.UserDAO;
 import igmini.dao.impl.UserDAOImpl;
@@ -24,14 +24,12 @@ public class EditProfileServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Kiểm tra trạng thái đăng nhập bảo mật
         HttpSession session = request.getSession();
         if (session.getAttribute("user") == null) {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
-        // Chuyển tiếp (Forward) sang trang giao diện jsp để hiển thị form sửa
         request.getRequestDispatcher("edit_profile.jsp").forward(request, response);
     }
 
@@ -47,11 +45,9 @@ public class EditProfileServlet extends HttpServlet {
             return;
         }
 
-        // 1. Lấy thông tin từ form
         String newUsername = request.getParameter("username");
         String newEmail = request.getParameter("email");
 
-        // 2. Xử lý file ảnh Avatar
         Part filePart = request.getPart("avatar");
         String fileName = filePart.getSubmittedFileName();
         String avatarPath = currentUser.getAvatarUrl();
@@ -77,12 +73,10 @@ public class EditProfileServlet extends HttpServlet {
             avatarPath = "uploads/" + uniqueFileName;
         }
 
-        // 3. Cập nhật đối tượng User
         currentUser.setUsername(newUsername);
         currentUser.setEmail(newEmail);
         currentUser.setAvatarUrl(avatarPath);
 
-        // 4. Lưu vào Database
         if (userDAO.updateUser(currentUser)) {
             // Cập nhật lại session để giao diện đổi ngay lập tức
             session.setAttribute("user", currentUser);

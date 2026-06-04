@@ -412,18 +412,26 @@
                         if (unreadCount == null) unreadCount = 0L;
                 %>
                 <li class="nav-item">
-        <span class="text-white user-info">
-            <i class="fas fa-user-circle me-1"></i> <%= user.getUsername() %>
-        </span>
+                    <span class="text-white user-info">
+                        <i class="fas fa-user-circle me-1"></i> <%= user.getUsername() %>
+                    </span>
                 </li>
+
+                <% if ("ADMIN".equals(user.getRole())) { %>
+                <li class="nav-item">
+                    <a href="${pageContext.request.contextPath}/admin/users" class="btn btn-sm btn-warning rounded-pill fw-bold px-3" style="font-size: 13px;">
+                        <i class="fas fa-user-shield"></i> Quản lý
+                    </a>
+                </li>
+                <% } %>
 
                 <li class="nav-item dropdown">
                     <a class="nav-link position-relative text-white" href="#" id="dropdownNoti" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 1.1rem; padding: 6px 10px;">
                         <i class="fas fa-bell"></i>
                         <% if (unreadCount > 0) { %>
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem; padding: 3px 6px;">
-                    <%= unreadCount %>
-                </span>
+                            <%= unreadCount %>
+                        </span>
                         <% } %>
                     </a>
 
@@ -457,7 +465,9 @@
                                             <% } else if ("COMMENT".equals(n.getType())) { %> đã bình luận về bài viết.
                                             <% } else if ("FOLLOW".equals(n.getType())) { %> đã bắt đầu theo dõi bạn.
                                             <% } %>
-                                            <div class="text-muted fw-normal" style="font-size: 0.75rem;"><%= n.getCreatedAt().toString().substring(5, 16) %></div>
+                                            <div class="text-muted fw-normal" style="font-size: 0.75rem;">
+                                                <%= n.getCreatedAt() != null && n.getCreatedAt().toString().length() >= 16 ? n.getCreatedAt().toString().substring(5, 16) : n.getCreatedAt() %>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -508,7 +518,18 @@
 <div class="container-main">
     <%
         if (user != null) {
+            String reportMsg = (String) session.getAttribute("message");
+            if (reportMsg != null) {
     %>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle me-2"></i> <%= reportMsg %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <%
+            session.removeAttribute("message");
+        }
+    %>
+
     <div class="welcome-section">
         <h1>Chào mừng, <%= user.getUsername() %>! 👋</h1>
         <p>Email: <%= user.getEmail() %></p>
@@ -540,7 +561,15 @@
                    onclick="return confirm('Bạn có chắc muốn xóa không?')">
                     Xóa
                 </a>
+                <% } else { %>
+                <button type="button" class="btn btn-sm ms-auto text-danger fw-bold"
+                        style="background: none; border:none;"
+                        data-bs-toggle="modal" data-bs-target="#reportPostModal"
+                        data-post-id="<%= p.getId() %>" onclick="preparePostReportId(this)">
+                    Báo cáo
+                </button>
                 <% } %>
+
             </div>
 
             <div class="post-image-container">
@@ -595,6 +624,7 @@
                                     <button class="comment-delete-btn" onclick="deleteComment(<%= cmt.getId() %>, <%= p.getId() %>)">
                                         Xóa
                                     </button>
+
                                     <% } %>
                                 </div>
                             </div>
@@ -742,6 +772,53 @@
             .then(function(data) {
                 if (data && data.success) location.reload();
             });
+    }
+</script>
+<div class="modal fade" id="reportPostModal" tabindex="-1" aria-labelledby="reportPostModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 12px;">
+            <div class="modal-header border-bottom-0 pt-4 px-4">
+                <h5 class="modal-title fw-bold text-dark" id="reportPostModalLabel">
+                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>Báo cáo bài viết
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <form action="${pageContext.request.contextPath}/report" method="POST">
+                <div class="modal-body px-4">
+                    <input type="hidden" name="postId" id="submitReportPostId">
+                    <p class="text-muted small mb-3">Tại sao bạn muốn báo cáo bài viết này? Lựa chọn của bạn giúp đội ngũ Admin kiểm duyệt nội dung chính xác hơn.</p>
+
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="radio" name="reason" id="reason1" value="Nội dung nhạy cảm, đồi trụy" checked>
+                        <label class="form-check-label fw-semibold text-secondary" for="reason1">Nội dung nhạy cảm, đồi trụy</label>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="radio" name="reason" id="reason2" value="Bạo lực, kích động bạo lực">
+                        <label class="form-check-label fw-semibold text-secondary" for="reason2">Bạo lực, kích động bạo lực</label>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="radio" name="reason" id="reason3" value="Ngôn từ gây thù ghét, quấy rối">
+                        <label class="form-check-label fw-semibold text-secondary" for="reason3">Ngôn từ gây thù ghét, quấy rối</label>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="radio" name="reason" id="reason4" value="Spam hoặc lừa đảo">
+                        <label class="form-check-label fw-semibold text-secondary" for="reason4">Spam hoặc lừa đảo</label>
+                    </div>
+                </div>
+                <div class="modal-footer border-top-0 pb-4 px-4">
+                    <button type="button" class="btn btn-light rounded-pill px-3" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-danger rounded-pill px-4 fw-bold">Gửi báo cáo</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function preparePostReportId(button) {
+        var postId = button.getAttribute('data-post-id');
+        document.getElementById('submitReportPostId').value = postId;
     }
 </script>
 </body>

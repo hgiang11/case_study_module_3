@@ -295,7 +295,8 @@
             </button>
         </form>
 
-        <a href="<%= request.getContextPath() %>/home" class="btn-back">
+        <a href="<%= request.getContextPath() %>/profile
+" class="btn-back">
             <i class="fas fa-arrow-left"></i> Quay lại
         </a>
     </div>

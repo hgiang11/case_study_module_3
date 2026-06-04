@@ -1,4 +1,4 @@
-package igmini.controller;
+package igmini.controller.interaction;
 
 import igmini.dao.CommentDAO;
 import igmini.dao.NotificationDAO;

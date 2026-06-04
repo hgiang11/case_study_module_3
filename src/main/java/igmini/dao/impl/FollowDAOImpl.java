@@ -5,6 +5,7 @@ import igmini.utils.DBConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class FollowDAOImpl implements FollowDAO {
     @Override
@@ -15,7 +16,7 @@ public class FollowDAOImpl implements FollowDAO {
             ps.setInt(1, followerId);
             ps.setInt(2, followingId);
             return ps.executeUpdate() > 0;
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (SQLException e) { e.printStackTrace(); }
         return false;
     }
 
@@ -27,7 +28,7 @@ public class FollowDAOImpl implements FollowDAO {
             ps.setInt(1, followerId);
             ps.setInt(2, followingId);
             return ps.executeUpdate() > 0;
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (SQLException e) { e.printStackTrace(); }
         return false;
     }
 
@@ -41,11 +42,9 @@ public class FollowDAOImpl implements FollowDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 return rs.next();
             }
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (SQLException e) { e.printStackTrace(); }
         return false;
     }
-
-
 
     @Override
     public int getFollowerCount(int userId) {
@@ -56,7 +55,7 @@ public class FollowDAOImpl implements FollowDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) return rs.getInt(1);
             }
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (SQLException e) { e.printStackTrace(); }
         return 0;
     }
 
@@ -69,7 +68,7 @@ public class FollowDAOImpl implements FollowDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) return rs.getInt(1);
             }
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (SQLException e) { e.printStackTrace(); }
         return 0;
     }
 }

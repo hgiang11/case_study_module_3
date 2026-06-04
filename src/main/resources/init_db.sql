@@ -1,7 +1,4 @@
--- ============================================
--- SQL INIT SCRIPT - IgMini Database Schema
--- Best Practice: Normalized 3NF Design
--- ============================================
+
 
 -- 1. Bảng Users (Người dùng)
 CREATE TABLE IF NOT EXISTS users (
@@ -46,7 +43,6 @@ CREATE TABLE IF NOT EXISTS comments (
     FOREIGN KEY (post_id_comment) REFERENCES posts(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- ============================================
 -- INDEXES - Tối ưu hiệu năng query
 -- ============================================
 

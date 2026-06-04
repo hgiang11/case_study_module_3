@@ -1,4 +1,4 @@
-package igmini.controller;
+package igmini.controller.post;
 
 import igmini.dao.PostDAO;
 import igmini.dao.impl.PostDAOImpl;
@@ -61,15 +61,13 @@ public class CreatePostServlet extends HttpServlet {
                 uploadDir.mkdirs();
             }
 
-            // 2. Ghi file vật lý xuống thư mục uploads
             filePart.write(uploadPath + File.separator + fileName);
-            // 3. Chuẩn bị đối tượng Post để lưu vào DB
+
             String caption = request.getParameter("caption");
             Post post = new Post();
             post.setUser_id(user.getId());
             post.setCaption(caption);
 
-            // Lưu đường dẫn đầy đủ: uploads/12345_filename.jpg
             post.setImage_url("uploads/" + fileName);
 
 

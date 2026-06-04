@@ -1,4 +1,4 @@
-package igmini.controller;
+package igmini.controller.auth;
 
 import igmini.dao.impl.UserDAOImpl;
 import igmini.dao.UserDAO;
@@ -29,7 +29,6 @@ public class RegisterServlet extends HttpServlet {
 
         boolean isSuccess = userDAO.registerUser(newUser);
 
-        // 4. Thông báo kết quả
         if (isSuccess) {
             request.setAttribute("successMessage", "Đăng ký thành công! Chào mừng bạn đến với Mini Instagram.");
             response.sendRedirect(request.getContextPath() + "/login");

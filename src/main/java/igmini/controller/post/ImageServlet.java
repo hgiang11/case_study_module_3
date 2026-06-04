@@ -1,4 +1,4 @@
-package igmini.controller;
+package igmini.controller.post;
 
 
 import jakarta.servlet.annotation.WebServlet;
@@ -14,7 +14,6 @@ import java.nio.file.Files;
 public class ImageServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // BUG FIX #1: Kiểm tra null cho pathInfo
         String pathInfo = request.getPathInfo();
         if (pathInfo == null || pathInfo.length() <= 1) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);

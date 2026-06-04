@@ -22,7 +22,6 @@
                          class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;">
                     <div>
                         <h6 class="mb-0 fw-bold"><%= u.getUsername() %></h6>
-                        <small class="text-muted"><%= u.getEmail() %></small>
                     </div>
                 </div>
                 <a href="${pageContext.request.contextPath}/profile?userId=<%= u.getId() %>" class="btn btn-sm btn-outline-primary">Xem trang cá nhân</a>

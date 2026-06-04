@@ -1,4 +1,4 @@
-package igmini.controller;
+package igmini.controller.admin;
 
 import igmini.dao.ReportDAO;
 import igmini.dao.impl.ReportDAOImpl;
@@ -18,13 +18,11 @@ public class DeleteReportServlet extends HttpServlet {
         try {
             int reportId = Integer.parseInt(request.getParameter("id"));
 
-            // Gọi DAO xóa bản ghi báo cáo này
             reportDAO.deleteReport(reportId);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        // Xử lý xong quay về lại trang danh sách báo cáo
         response.sendRedirect(request.getContextPath() + "/admin/reports");
     }
 }

@@ -1,4 +1,4 @@
-package igmini.controller;
+package igmini.controller.common;
 
 
 import igmini.dao.UserDAO;

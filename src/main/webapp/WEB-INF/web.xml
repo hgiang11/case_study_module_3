@@ -6,7 +6,7 @@
          metadata-complete="false">
 <!--    <servlet>-->
 <!--        <servlet-name>ImageServlet</servlet-name>-->
-<!--        <servlet-class>igmini.controller.ImageServlet</servlet-class>-->
+<!--        <servlet-class>igmini.controller.post.ImageServlet</servlet-class>-->
 
 <!--        <multipart-config>-->
 <!--            <location></location>-->

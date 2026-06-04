@@ -7,6 +7,24 @@ public class User {
     private String password;
     private String avatarUrl;
 
+    private String role;
+    private boolean isActive;
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
 
     public User(int id, String username, String email, String password, String avatarUrl) {
         this.id = id;
