@@ -9,4 +9,23 @@ public interface NotificationDAO {
 
     List<Notification> getNotificationsByUserId(int userId);
     boolean markAsRead(int userId);
+
+
+
+    boolean createNotification(Notification noti);
+
+
+    boolean insertAdminNotification(int userId, String type, Integer postId, String content);
+
+
+    boolean insertSystemNotification(int userId, String type, Integer postId, String content);
+
+
+
+    boolean insertSystemNotificationByPostId(int postId, String type, String content);
 }
+
+
+
+
+

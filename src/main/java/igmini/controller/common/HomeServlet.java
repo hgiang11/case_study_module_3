@@ -4,9 +4,10 @@ import igmini.dao.PostDAO;
 import igmini.dao.NotificationDAO;
 import igmini.dao.impl.PostDAOImpl;
 import igmini.dao.impl.NotificationDAOImpl;
+import igmini.dao.impl.UserDAOImpl; // 1. Tự động Import thêm lớp xử lý User
 import igmini.model.Post;
 import igmini.model.Notification;
-import igmini.model.User;            
+import igmini.model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -48,6 +49,19 @@ public class HomeServlet extends HttpServlet {
             System.out.println("Lỗi khi nạp dữ liệu thông báo lên trang Home: " + e.getMessage());
             e.printStackTrace();
         }
+
+        // =========================================================================
+        // 2. CODE CHÈN THÊM: Nạp dữ liệu danh sách "Gợi ý cho bạn" lên trang Home
+        try {
+            UserDAOImpl userDAO = new UserDAOImpl();
+            // Gọi hàm lấy 5 user ngẫu nhiên loại trừ chính mình (currentUser)
+            List<User> suggestedUsers = userDAO.getSuggestedUsers(currentUser.getId());
+            request.setAttribute("suggestedUsers", suggestedUsers);
+        } catch (Exception e) {
+            System.out.println("Lỗi khi nạp dữ liệu gợi ý kết bạn: " + e.getMessage());
+            e.printStackTrace();
+        }
+        // =========================================================================
 
         request.getRequestDispatcher("/home.jsp").forward(request, response);
     }

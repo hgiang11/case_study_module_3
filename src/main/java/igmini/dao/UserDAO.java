@@ -22,4 +22,10 @@ public interface UserDAO {
 
 
     boolean changePassword(int userId, String newPasswordInput);
+
+
+    List<User> getSuggestedUsers(int currentUserId);
+
+
+    boolean adminUpdateUserFull(int id, String username, String email, String role, boolean isActive, String newPassword) ;
 }

@@ -14,6 +14,15 @@ public class Notification {
     private String senderUsername;
     private String senderAvatarUrl;
 
+    private String content;
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 
     public Notification() {
     }

@@ -206,7 +206,8 @@ public class PostDAOImpl implements PostDAO {
     @Override
     public List<Post> getReportedPosts() {
         List<Post> list = new ArrayList<>();
-        String sql = "SELECT p.*, r.id AS report_id, r.reason, r.created_at AS report_date, u.username AS reporter_name " +
+        // ĐẶT ALIAS RÕ RÀNG: p.id AS post_actual_id
+        String sql = "SELECT p.*, p.id AS post_actual_id, r.id AS report_id, r.reason, r.created_at AS report_date, u.username AS reporter_name " +
                 "FROM posts p " +
                 "INNER JOIN reports r ON p.id = r.post_id " +
                 "INNER JOIN users u ON r.reporter_id = u.id " +
@@ -216,14 +217,20 @@ public class PostDAOImpl implements PostDAO {
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 Post p = new Post();
-                p.setId(rs.getInt("id"));
+
+                // 🎯 SỬA CHỖ NÀY: Lấy chính xác theo Alias post_actual_id vừa đặt
+                p.setId(rs.getInt("post_actual_id"));
+
                 p.setUser_id(rs.getInt("user_id"));
                 p.setImage_url(rs.getString("image_url"));
-                p.setCaption(rs.getString("caption"));
-                p.setCreated_at(rs.getTimestamp("created_at"));
-                p.setUsername(rs.getString("reporter_name"));
-                String reason = rs.getString("reason");
+
                 String originalCaption = rs.getString("caption");
+                p.setCreated_at(rs.getTimestamp("created_at"));
+
+                // Người hiển thị ở cột người báo cáo vi phạm
+                p.setUsername(rs.getString("reporter_name"));
+
+                String reason = rs.getString("reason");
                 p.setCaption("⚠️ LÝ DO: " + (reason != null ? reason : "Không rõ") + " | (Nội dung gốc: " + (originalCaption != null ? originalCaption : "") + ")");
                 list.add(p);
             }
@@ -232,6 +239,7 @@ public class PostDAOImpl implements PostDAO {
         }
         return list;
     }
+
 
 
     @Override

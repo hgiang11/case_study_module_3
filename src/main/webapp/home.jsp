@@ -15,7 +15,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mini Instagram - Home</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -24,147 +24,145 @@
         }
 
         body {
-            background: #fafafa;
+            background: #f8f9fa; /* Màu nền trắng xám nhẹ đồng bộ */
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             min-height: 100vh;
+            color: #212529;
         }
 
-        /* Khắc phục đè màu navbar của Bootstrap */
-        .navbar {
-            background: linear-gradient(135deg, #833AB4 0%, #FD1D1D 25%, #F56040 50%, #FCAF45 100%) !important;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+        /* 🖤 Navbar màu đen tuyền trơn sạch sẽ, không còn nút Đăng bài nữa */
+        .navbar-custom {
+            background-color: #000000 !important;
+            border-bottom: 1px solid #262626;
             padding: 12px 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
-        .navbar-brand {
-            font-size: 24px;
-            font-weight: 700;
+        .navbar-brand-custom {
+            font-size: 22px;
+            font-weight: 800;
             color: white !important;
-            letter-spacing: -1px;
-            display: flex;
-            align-items: center;
+            text-decoration: none;
+            letter-spacing: -0.5px;
         }
 
-        .navbar-brand::before {
-            content: "";
-            display: inline-block;
-            width: 28px;
-            height: 28px;
-            background: linear-gradient(135deg, #833AB4 0%, #FD1D1D 25%, #F56040 50%, #FCAF45 100%);
-            border: 2px solid white;
-            border-radius: 8px;
-            margin-right: 8px;
-        }
-
-        .navbar-brand:hover {
-            transform: scale(1.03);
-            transition: transform 0.3s ease;
-        }
-
-        /* Tinh chỉnh thanh tìm kiếm bo tròn */
         .search-container {
-            max-width: 260px;
+            max-width: 240px;
             width: 100%;
         }
         .search-input {
             border-radius: 20px !important;
-            background: rgba(255, 255, 255, 0.9) !important;
+            background: #262626 !important;
             font-size: 14px;
             padding-left: 15px;
-            border: none !important;
+            border: 1px solid #363636 !important;
+            color: white !important;
+        }
+        .search-input::placeholder {
+            color: #8e8e8e;
         }
         .search-input:focus {
-            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3) !important;
-            background: white !important;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2) !important;
+            background: #363636 !important;
         }
 
         .user-info {
-            color: white;
+            color: #efefef;
             font-size: 14px;
             font-weight: 600;
         }
 
         .btn-logout {
-            background: rgba(255, 255, 255, 0.2) !important;
-            color: white !important;
-            border: 1px solid rgba(255, 255, 255, 0.5) !important;
-            padding: 6px 16px !important;
+            background: transparent !important;
+            color: #b3b3b3 !important;
+            border: none !important;
+            padding: 6px 12px !important;
             border-radius: 20px !important;
             text-decoration: none;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             font-weight: 600;
             font-size: 13px !important;
         }
-
         .btn-logout:hover {
-            background: white !important;
-            color: #FD1D1D !important;
-        }
-
-        .navbar-nav .btn-create-post {
-            background: white !important;
-            color: #FD1D1D !important;
-            border: none !important;
-            padding: 6px 16px !important;
-            border-radius: 20px !important;
-            text-decoration: none !important;
-            font-weight: 700 !important;
-            font-size: 13px !important;
-            margin-right: 5px !important;
-            display: inline-flex !important;
-            align-items: center !important;
-            gap: 5px !important;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1) !important;
-            transition: all 0.3s ease !important;
-        }
-
-        .navbar-nav .btn-create-post:hover {
-            background: rgba(255,255,255,0.9) !important;
-            transform: translateY(-1px);
-        }
-
-        .btn-login {
-            background: white !important;
-            color: #833AB4 !important;
-            padding: 8px 20px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: 700;
-            display: inline-block;
+            color: #ff3b30 !important;
         }
 
         .container-main {
             max-width: 600px;
-            margin: 30px auto;
+            margin: 40px auto;
             padding: 0 15px;
         }
 
+        /* ✨ KHỐI HỘP CHÀO MỪNG KẾT HỢP ĐĂNG BÀI NHANH (MỚI) */
         .welcome-section {
             background: white;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            text-align: center;
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+            border: 1px solid #efefef;
         }
-
-        /* Sửa màu hiển thị chữ Welcome tránh bị ẩn */
-        .welcome-section h1 {
-            color: #262626;
-            font-size: 26px;
+        .welcome-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            border-bottom: 1px solid #f2f2f2;
+            padding-bottom: 14px;
+        }
+        .welcome-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid #dee2e6;
+        }
+        .welcome-text h1 {
+            color: #212529;
+            font-size: 18px;
             font-weight: 700;
-            margin-bottom: 6px;
+            margin: 0;
+        }
+        .welcome-text p {
+            font-size: 13px;
+            color: #8e8e8e;
+            margin: 0;
         }
 
-        .welcome-section p {
-            color: #666;
+        /* Thanh giả lập ô nhập liệu để click chuyển hướng sang trang Đăng bài */
+        .create-post-trigger {
+            background-color: #f0f2f5;
+            border-radius: 25px;
+            padding: 10px 20px;
+            color: #65676b;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-decoration: none !important;
+        }
+        .create-post-trigger:hover {
+            background-color: #e4e6eb;
+            color: #65676b;
+        }
+        .post-icon-badge {
+            background: linear-gradient(45deg, #ff1f5a, #ff5e3a);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 14px;
+            box-shadow: 0 4px 8px rgba(255, 31, 90, 0.2);
         }
 
-        /* Sửa màu hiển thị tiêu đề danh sách bài viết */
         .posts-title {
-            color: #262626;
-            font-size: 20px;
+            color: #212529;
+            font-size: 19px;
             font-weight: 700;
             margin-bottom: 20px;
             display: flex;
@@ -172,79 +170,84 @@
             gap: 8px;
         }
 
+        /* Thẻ bài viết */
         .post-card {
             background: white;
-            border-radius: 12px;
-            margin-bottom: 25px;
-            border: 1px solid #dee2e6;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            border: 1px solid #efefef;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.04);
             overflow: hidden;
         }
 
         .post-image-container {
-            background: #efefef;
+            background: #fafafa;
             display: flex;
             justify-content: center;
             align-items: center;
+            width: 100%;
         }
 
         .post-image {
             width: 100%;
             height: auto;
-            max-height: 550px;
+            max-height: 580px;
             object-fit: cover;
         }
 
         .post-content {
-            padding: 15px;
+            padding: 18px;
         }
 
         .post-caption {
-            color: #262626;
+            color: #212529;
             font-size: 15px;
             line-height: 1.5;
             margin-bottom: 12px;
         }
 
         .post-meta {
-            color: #999;
+            color: #8e8e8e;
             font-size: 12px;
-            border-top: 1px solid #f0f0f0;
+            border-top: 1px solid #f8f9fa;
             padding-top: 12px;
         }
 
         .post-actions {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 10px;
+            gap: 14px;
+            margin-bottom: 12px;
         }
 
         .like-button {
             background: none;
             border: none;
             padding: 0;
-            color: #262626;
+            color: #212529;
             cursor: pointer;
+            transition: transform 0.2s;
         }
-
+        .like-button:hover {
+            transform: scale(1.1);
+        }
         .like-button .fa-heart {
             font-size: 24px;
         }
-
         .like-button .fas.fa-heart {
-            color: #ed4956;
+            color: #ff3b30;
         }
 
         .like-count {
-            color: #262626;
-            font-weight: 600;
+            color: #212529;
+            font-weight: 700;
             font-size: 14px;
         }
 
         .comments-section {
-            margin-top: 12px;
-            border-top: 1px solid #f0f0f0;
-            padding-top: 12px;
+            margin-top: 14px;
+            border-top: 1px solid #f8f9fa;
+            padding-top: 14px;
         }
 
         .comments-header {
@@ -255,7 +258,7 @@
         }
 
         .comments-list {
-            max-height: 240px;
+            max-height: 200px;
             overflow-y: auto;
             margin-bottom: 12px;
         }
@@ -263,22 +266,18 @@
         .comment-item {
             display: flex;
             gap: 10px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             font-size: 14px;
         }
 
-        .comment-content {
-            flex: 1;
-        }
-
         .comment-username {
-            font-weight: 600;
-            color: #262626;
+            font-weight: 700;
+            color: #212529;
             margin-right: 6px;
         }
 
         .comment-text {
-            color: #262626;
+            color: #212529;
             display: inline;
         }
 
@@ -294,7 +293,7 @@
         .comment-delete-btn {
             background: none;
             border: none;
-            color: #ed4956;
+            color: #ff3b30;
             cursor: pointer;
             font-weight: 600;
             padding: 0;
@@ -302,10 +301,10 @@
 
         .comment-form {
             display: flex;
-            gap: 8px;
+            gap: 10px;
             align-items: center;
-            border-top: 1px solid #f0f0f0;
-            padding-top: 10px;
+            border-top: 1px solid #f8f9fa;
+            padding-top: 12px;
         }
 
         .comment-form-group {
@@ -319,6 +318,7 @@
             font-size: 14px;
             resize: none;
             max-height: 80px;
+            background: transparent;
         }
         .comment-input:focus {
             outline: none;
@@ -329,54 +329,34 @@
             color: #0095f6;
             border: none;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
         }
 
         .no-posts {
             background: white;
-            border-radius: 12px;
-            padding: 50px 20px;
-            border: 1px solid #dee2e6;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            border-radius: 20px;
+            padding: 60px 20px;
+            border: 1px solid #efefef;
+            text-align: center;
         }
 
         .no-posts i {
-            font-size: 50px;
-            color: #262626;
+            font-size: 48px;
+            color: #8e8e8e;
             margin-bottom: 15px;
-        }
-
-        .no-posts p {
-            font-size: 16px;
-            font-weight: 600;
-            color: #262626;
-        }
-
-        .no-posts .btn-create-post {
-            color: white !important;
-            background: linear-gradient(135deg, #833AB4 0%, #FD1D1D 50%, #FCAF45 100%) !important;
-            margin-top: 15px;
-            padding: 8px 20px;
-            border-radius: 20px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
         }
 
         .not-logged-in {
             background: white;
-            border-radius: 15px;
-            padding: 50px 30px;
+            border-radius: 20px;
+            padding: 60px 30px;
             text-align: center;
-            border: 1px solid #dee2e6;
+            border: 1px solid #efefef;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.04);
         }
 
         .not-logged-in h2 {
-            color: #262626;
             font-size: 24px;
             margin-bottom: 15px;
             font-weight: 700;
@@ -387,23 +367,43 @@
                 display: none;
             }
         }
+
+
+
+
+
+        .suggestion-sidebar {
+            position: absolute;
+            top: 15px;               /* Căn cao bằng với phần "Chào mừng, izlne.a!" */
+            left: calc(100% + 30px); /* Đẩy hẳn ra ngoài cạnh phải của khối chính 30px */
+            width: 300px;            /* Độ rộng của cột gợi ý */
+            height: fit-content;
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); /* Đổ bóng nhẹ giống các card của bạn */
+        }
     </style>
 </head>
-<body>
-<nav class="navbar navbar-expand-lg navbar-dark">
+<body class="bg-light d-flex flex-column min-vh-100">
+
+
+<nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
     <div class="container-fluid px-lg-4">
-        <a class="navbar-brand" href="${pageContext.request.contextPath}/home">Mini Instagram</a>
+        <a class="navbar-brand-custom" href="${pageContext.request.contextPath}/home">
+            <i class="fab fa-instagram me-2"></i>Mini Instagram
+        </a>
 
         <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNav">
-            <form action="${pageContext.request.contextPath}/search" method="GET" class="d-flex me-auto my-2 my-lg-0 search-container">
+            <form action="${pageContext.request.contextPath}/search" method="GET" class="d-flex me-auto my-2 my-lg-0 search-container ms-4">
                 <input class="form-control search-input" type="search" name="query" placeholder="Tìm kiếm..." aria-label="Search" required>
             </form>
 
-            <ul class="navbar-nav ms-auto align-items-center flex-row gap-3">
+            <ul class="navbar-nav ms-auto align-items-center flex-row gap-2">
                 <%
                     User user = (User) session.getAttribute("user");
                     if (user != null) {
@@ -411,21 +411,21 @@
                         Long unreadCount = (Long) request.getAttribute("unreadCount");
                         if (unreadCount == null) unreadCount = 0L;
                 %>
-                <li class="nav-item">
-                    <span class="text-white user-info">
+                <li class="nav-item me-2">
+                    <a href="${pageContext.request.contextPath}/profile" class="text-decoration-none user-info">
                         <i class="fas fa-user-circle me-1"></i> <%= user.getUsername() %>
-                    </span>
+                    </a>
                 </li>
 
                 <% if ("ADMIN".equals(user.getRole())) { %>
-                <li class="nav-item">
+                <li class="nav-item me-2">
                     <a href="${pageContext.request.contextPath}/admin/users" class="btn btn-sm btn-warning rounded-pill fw-bold px-3" style="font-size: 13px;">
                         <i class="fas fa-user-shield"></i> Quản lý
                     </a>
                 </li>
                 <% } %>
 
-                <li class="nav-item dropdown">
+                <li class="nav-item dropdown me-2">
                     <a class="nav-link position-relative text-white" href="#" id="dropdownNoti" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 1.1rem; padding: 6px 10px;">
                         <i class="fas fa-bell"></i>
                         <% if (unreadCount > 0) { %>
@@ -489,12 +489,6 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="${pageContext.request.contextPath}/create-post" class="btn-create-post">
-                        <i class="fas fa-plus"></i> Đăng bài
-                    </a>
-                </li>
-
-                <li class="nav-item">
                     <a href="${pageContext.request.contextPath}/logout" class="btn-logout">
                         Đăng xuất
                     </a>
@@ -503,7 +497,7 @@
                 } else {
                 %>
                 <li class="nav-item">
-                    <a href="${pageContext.request.contextPath}/login" class="btn-login">
+                    <a href="${pageContext.request.contextPath}/login" class="btn btn-sm btn-light rounded-pill px-3 fw-bold">
                         Đăng nhập
                     </a>
                 </li>
@@ -515,13 +509,60 @@
     </div>
 </nav>
 
+
+<div class="container py-4 flex-grow-1">
+
+<div class="container-main position-relative">
+
+    <div class="suggestion-sidebar d-none d-xl-block">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="text-secondary fw-bold small">Gợi ý cho bạn</span>
+            <a href="#" class="text-dark fw-bold small text-decoration-none" style="font-size: 12px;">Xem tất cả</a>
+        </div>
+
+        <div class="suggestion-list">
+            <%
+                List<User> suggestedUsers = (List<User>) request.getAttribute("suggestedUsers");
+                if (suggestedUsers != null && !suggestedUsers.isEmpty()) {
+                    for (User su : suggestedUsers) {
+            %>
+            <div class="d-flex justify-content-between align-items-center mb-3" style="width: 280px;">
+                <div class="d-flex align-items-center">
+                    <img src="${pageContext.request.contextPath}/<%= (su.getAvatarUrl() != null && !su.getAvatarUrl().isEmpty()) ? su.getAvatarUrl() : "assets/images/default-avatar.png" %>"
+                         class="rounded-circle border me-2"
+                         style="width: 36px; height: 36px; object-fit: cover;">
+                    <div class="d-flex flex-column">
+                        <span class="fw-bold text-dark small">@<%= su.getUsername() %></span>
+                        <span class="text-muted extra-small" style="font-size: 11px;">Gợi ý cho bạn</span>
+                    </div>
+                </div>
+                <a href="${pageContext.request.contextPath}/interaction/follow?action=follow&id=<%= su.getId() %>"
+                   class="btn btn-sm btn-link text-primary fw-bold text-decoration-none small p-0" style="font-size: 12px;">
+                    Theo dõi
+                </a>
+            </div>
+            <%
+
+
+
+
+                }
+            } else {
+            %>
+            <p class="text-muted small fst-italic text-center my-2">Không có gợi ý mới.</p>
+            <% } %>
+        </div>
+    </div>
+
+
+</div>
 <div class="container-main">
     <%
         if (user != null) {
             String reportMsg = (String) session.getAttribute("message");
             if (reportMsg != null) {
     %>
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <div class="alert alert-success alert-dismissible fade show" role="alert" style="border-radius: 12px;">
         <i class="fas fa-check-circle me-2"></i> <%= reportMsg %>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
@@ -530,50 +571,71 @@
         }
     %>
 
-    <div class="welcome-section">
-        <h1>Chào mừng, <%= user.getUsername() %>! 👋</h1>
-        <p>Email: <%= user.getEmail() %></p>
+    <div class="welcome-section shadow-sm">
+        <div class="welcome-header">
+            <img src="https://ui-avatars.com/api/?name=<%= user.getUsername() %>&background=ff5e3a&color=fff" class="welcome-avatar" alt="Avatar">
+            <div class="welcome-text">
+                <h1>Chào mừng, <%= user.getUsername() %>! 👋</h1>
+                <p>Hôm nay bạn thế nào? Chia sẻ một khoảnh khắc mới nhé.</p>
+            </div>
+        </div>
+
+        <a href="${pageContext.request.contextPath}/create-post" class="create-post-trigger">
+            <span>Bạn đang nghĩ gì thế?</span>
+            <div class="post-icon-badge">
+                <i class="fas fa-plus"></i>
+            </div>
+        </a>
     </div>
 
     <div class="posts-grid">
-        <h2 class="posts-title"><i class="fas fa-images"></i> Bài viết gần đây</h2>
+        <h2 class="posts-title"><i class="fas fa-stream text-danger"></i> Bảng tin khoảnh khắc</h2>
         <%
             List<Post> posts = (List<Post>) request.getAttribute("postList");
             LikeDAO likeDAO = new LikeDAOImpl();
             if (posts != null && !posts.isEmpty()) {
                 for(Post p : posts) {
+
+                    String rawImgUrl = p.getImage_url();
+                    String finalImgUrl = "";
+                    if(rawImgUrl != null) {
+                        if(rawImgUrl.startsWith("http") || rawImgUrl.startsWith("/")) {
+                            finalImgUrl = request.getContextPath() + rawImgUrl;
+                        } else {
+                            finalImgUrl = request.getContextPath() + "/" + rawImgUrl;
+                        }
+                    }
         %>
         <div class="post-card">
             <div class="p-3 d-flex align-items-center border-bottom">
                 <a href="${pageContext.request.contextPath}/profile?userId=<%= p.getUser_id() %>">
                     <img src="<%= (p.getAvatarUrl() != null && !p.getAvatarUrl().isEmpty()) ? request.getContextPath() + "/" + p.getAvatarUrl() : "https://ui-avatars.com/api/?name=" + p.getUsername() %>"
-                         style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;" class="me-2 border">
+                         style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover;" class="me-2 border">
                 </a>
 
-                <a href="${pageContext.request.contextPath}/profile?userId=<%= p.getUser_id() %>" class="text-decoration-none fw-bold" style="color: #262626;">
+                <a href="${pageContext.request.contextPath}/profile?userId=<%= p.getUser_id() %>" class="text-decoration-none fw-bold" style="color: #212529; font-size: 14px;">
                     <%= p.getUsername() %>
                 </a>
 
                 <% if (user.getId() == p.getUser_id()) { %>
                 <a href="${pageContext.request.contextPath}/delete-post?id=<%= p.getId() %>"
                    class="btn btn-sm ms-auto"
-                   style="background: none; border:none; color: #ed4956; font-weight: 600;"
-                   onclick="return confirm('Bạn có chắc muốn xóa không?')">
+                   style="background: none; border:none; color: #ff3b30; font-weight: 600; font-size: 13px;"
+                   onclick="return confirm('Bạn có chắc muốn xóa bài viết này không?')">
                     Xóa
                 </a>
                 <% } else { %>
                 <button type="button" class="btn btn-sm ms-auto text-danger fw-bold"
-                        style="background: none; border:none;"
+                        style="background: none; border:none; font-size: 13px;"
                         data-bs-toggle="modal" data-bs-target="#reportPostModal"
                         data-post-id="<%= p.getId() %>" onclick="preparePostReportId(this)">
                     Báo cáo
                 </button>
                 <% } %>
-
             </div>
 
             <div class="post-image-container">
-                <img src="${pageContext.request.contextPath}/<%= p.getImage_url() %>" class="post-image">
+                <img src="<%= finalImgUrl %>" class="post-image" alt="Post Image">
             </div>
 
             <div class="post-content">
@@ -595,9 +657,9 @@
                     <span class="fw-bold me-2"><%= p.getUsername() %></span><%= p.getCaption() %>
                 </div>
                 <div class="post-meta">
-                         <span>
-                             <%= p.getCreated_at() != null ? p.getCreated_at().toString() : "" %>
-                         </span>
+                     <span>
+                         <i class="far fa-clock me-1"></i><%= p.getCreated_at() != null ? p.getCreated_at().toString() : "" %>
+                     </span>
                 </div>
 
                 <%
@@ -617,14 +679,13 @@
                                 <span class="comment-username"><%= cmt.getUsername() %></span>
                                 <div class="comment-text"><%= cmt.getContent() %></div>
                                 <div class="comment-meta">
-                                         <span>
-                                             <%= cmt.getCreated_at() != null ? cmt.getCreated_at().toString().substring(0, 10) : "" %>
-                                         </span>
+                                     <span>
+                                         <%= cmt.getCreated_at() != null ? cmt.getCreated_at().toString().substring(0, 10) : "" %>
+                                     </span>
                                     <% if (user != null && user.getId() == cmt.getUser_id_comment()) { %>
                                     <button class="comment-delete-btn" onclick="deleteComment(<%= cmt.getId() %>, <%= p.getId() %>)">
                                         Xóa
                                     </button>
-
                                     <% } %>
                                 </div>
                             </div>
@@ -648,12 +709,9 @@
             }
         } else {
         %>
-        <div class="no-posts">
-            <i class="far fa-image"></i>
-            <p>Chưa có bài viết nào</p>
-            <a href="${pageContext.request.contextPath}/create-post" class="btn-create-post">
-                <i class="fas fa-plus"></i> Tạo bài viết đầu tiên
-            </a>
+        <div class="no-posts shadow-sm">
+            <i class="far fa-images d-block text-muted"></i>
+            <p class="fw-semibold">Chưa có bài viết nào trên hệ thống</p>
         </div>
         <%
             }
@@ -662,16 +720,19 @@
     <%
     } else {
     %>
-    <div class="not-logged-in">
-        <h2>Chào mừng đến Mini Instagram! 📸</h2>
-        <p>Vui lòng đăng nhập để xem bài viết và chia sẻ khoảnh khắc của bạn.</p>
-        <a href="${pageContext.request.contextPath}/login" class="btn-login" style="background: linear-gradient(135deg, #833AB4 0%, #FD1D1D 50%, #FCAF45 100%) !important; color: white !important;">
+    <div class="not-logged-in shadow-sm">
+        <h2 class="fw-bold">📸 Chào mừng đến Mini Instagram!</h2>
+        <p class="text-muted mb-4">Vui lòng đăng nhập để theo dõi bài viết và chia sẻ khoảnh khắc tuyệt vời của bạn.</p>
+        <a href="${pageContext.request.contextPath}/login" class="btn btn-danger rounded-pill px-4 py-2 fw-bold" style="background: linear-gradient(45deg, #ff1f5a, #ff5e3a) !important; border:none;">
             Đăng nhập ngay
         </a>
     </div>
     <%
         }
     %>
+
+
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -706,7 +767,7 @@
                     var countElem = container.querySelector('.like-count');
                     if (countElem) countElem.textContent = count + ' lượt thích';
                 }).catch(function(err) {
-                    console.error('Like request failed', err);
+                    console.error('Like failed', err);
                 });
             });
         });
@@ -773,22 +834,26 @@
                 if (data && data.success) location.reload();
             });
     }
+
+    function preparePostReportId(btn) {
+        var postId = btn.getAttribute('data-post-id');
+        document.getElementById('submitReportPostId').value = postId;
+    }
 </script>
+
 <div class="modal fade" id="reportPostModal" tabindex="-1" aria-labelledby="reportPostModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content" style="border-radius: 12px;">
+        <div class="modal-content" style="border-radius: 16px;">
             <div class="modal-header border-bottom-0 pt-4 px-4">
                 <h5 class="modal-title fw-bold text-dark" id="reportPostModalLabel">
                     <i class="fas fa-exclamation-triangle text-warning me-2"></i>Báo cáo bài viết
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-
             <form action="${pageContext.request.contextPath}/report" method="POST">
                 <div class="modal-body px-4">
                     <input type="hidden" name="postId" id="submitReportPostId">
-                    <p class="text-muted small mb-3">Tại sao bạn muốn báo cáo bài viết này? Lựa chọn của bạn giúp đội ngũ Admin kiểm duyệt nội dung chính xác hơn.</p>
-
+                    <p class="text-muted small mb-3">Tại sao bạn muốn báo cáo bài viết này? Lựa chọn của bạn giúp đội ngũ Admin kiểm duyệt chính xác hơn.</p>
                     <div class="form-check mb-3">
                         <input class="form-check-input" type="radio" name="reason" id="reason1" value="Nội dung nhạy cảm, đồi trụy" checked>
                         <label class="form-check-label fw-semibold text-secondary" for="reason1">Nội dung nhạy cảm, đồi trụy</label>
@@ -815,11 +880,26 @@
     </div>
 </div>
 
+
 <script>
     function preparePostReportId(button) {
         var postId = button.getAttribute('data-post-id');
         document.getElementById('submitReportPostId').value = postId;
     }
 </script>
+</div>
+
+<footer class="bg-black text-white-50 border-top border-secondary text-xs" style="padding: 2px 0; height: 24px; line-height: 20px; margin-top: auto;">
+    <div class="container d-flex justify-content-between align-items-center" style="max-width: 935px; height: 100%;">
+        <div style="opacity: 0.6; font-size: 11px; display: flex; align-items: center;">
+            &copy; 2026 Mini Instagram. All rights reserved.
+        </div>
+        <div class="d-flex gap-3 text-white-50" style="opacity: 0.6; font-size: 11px; display: flex; align-items: center;">
+            <a href="#" class="text-white-50 text-decoration-none"><i class="bi bi-facebook"></i></a>
+            <a href="#" class="text-white-50 text-decoration-none"><i class="bi bi-twitter-x"></i></a>
+            <a href="#" class="text-white-50 text-decoration-none"><i class="bi bi-instagram"></i></a>
+        </div>
+    </div>
+</footer>
 </body>
 </html>

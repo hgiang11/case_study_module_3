@@ -20,6 +20,28 @@
         List<Notification> notiList = (List<Notification>) request.getAttribute("notiList");
         if (notiList != null && !notiList.isEmpty()) {
           for (Notification n : notiList) {
+
+            // 🚨 TRƯỜNG HỢP 1: THÔNG BÁO TỪ HỆ THỐNG / ADMIN (Bảo mật tuyệt đối danh tính)
+            if ("SYSTEM_DELETE".equals(n.getType()) || n.getSenderId() == 0) {
+      %>
+      <div class="p-3 d-flex align-items-center justify-content-between border-bottom <%= n.isRead() ? "" : "bg-light fw-bold" %>" style="background-color: #fff2f2;">
+        <div class="d-flex align-items-center gap-3">
+          <div style="width: 45px; height: 45px; border-radius: 50%; overflow:hidden; background: #ffe3e3; display:flex; align-items:center; justify-content:center;">
+            <i class="fas fa-user-shield text-danger" style="font-size: 20px;"></i>
+          </div>
+
+          <div>
+            <span class="text-danger fw-bold">Ban quản trị hệ thống</span>
+            <div class="text-dark small my-1"><%= n.getContent() != null ? n.getContent() : "" %></div>
+            <div class="text-muted small fw-normal">
+              <%= n.getCreatedAt() != null ? n.getCreatedAt().toString().substring(0, 16) : "" %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <%
+      } else {
+        // 👥 TRƯỜNG HỢP 2: THÔNG BÁO TỪ NGƯỜI DÙNG KHÁC (LIKE, COMMENT, FOLLOW)
       %>
       <div class="p-3 d-flex align-items-center justify-content-between border-bottom <%= n.isRead() ? "" : "bg-light fw-bold" %>">
         <div class="d-flex align-items-center gap-3">
@@ -32,7 +54,10 @@
           </div>
 
           <div>
-            <span class="text-primary"><%= n.getSenderUsername() %></span>
+            <span class="text-primary">
+              <%= n.getSenderUsername() != null ? "@" + n.getSenderUsername() : "@User" %>
+            </span>
+
             <% if ("LIKE".equals(n.getType())) { %>
             đã thích bài viết của bạn.
             <% } else if ("COMMENT".equals(n.getType())) { %>
@@ -40,22 +65,32 @@
             <% } else if ("FOLLOW".equals(n.getType())) { %>
             đã bắt đầu theo dõi bạn.
             <% } %>
-            <div class="text-muted small fw-normal"><%= n.getCreatedAt().toString().substring(0, 16) %></div>
+
+            <% if(n.getContent() != null && !n.getContent().isEmpty() && !"LIKE".equals(n.getType()) && !"FOLLOW".equals(n.getType())) { %>
+            <div class="text-secondary small fst-italic mt-1">"<%= n.getContent() %>"</div>
+            <% } %>
+
+            <div class="text-muted small fw-normal">
+              <%= n.getCreatedAt() != null ? n.getCreatedAt().toString().substring(0, 16) : "" %>
+            </div>
           </div>
         </div>
 
-        <% if (n.getPostId() != null) { %>
+        <%-- Kiểm tra an toàn: Nếu là loại SYSTEM_DELETE thì bài viết đã mất, không hiện nút Xem bài nữa --%>
+        <% if (n.getPostId() != null && !"SYSTEM_DELETE".equals(n.getType())) { %>
         <a href="${pageContext.request.contextPath}/post-detail?id=<%= n.getPostId() %>" class="btn btn-sm btn-outline-secondary rounded-pill">Xem</a>
-        <% } else { %>
+        <%-- 🚨 ĐOẠN CHÈN THÊM: Chỉ hiển thị nút Xem Profile khi đây KHÔNG PHẢI thông báo cưỡng chế xóa bài từ hệ thống --%>
+        <% } else if (!"SYSTEM_DELETE".equals(n.getType())) { %>
         <a href="${pageContext.request.contextPath}/profile?userId=<%= n.getSenderId() %>" class="btn btn-sm btn-outline-primary rounded-pill">Xem Profile</a>
         <% } %>
       </div>
       <%
+          }
         }
       } else {
       %>
       <div class="text-center p-5 text-muted">
-        <i class="far fa-bell style='font-size: 40px; opacity:0.5;'"></i>
+        <i class="far fa-bell" style="font-size: 40px; opacity:0.5;"></i>
         <p class="mt-2 mb-0">Bạn chưa có thông báo nào mới.</p>
       </div>
       <% } %>

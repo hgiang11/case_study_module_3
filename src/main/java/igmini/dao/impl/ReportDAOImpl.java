@@ -97,4 +97,48 @@ public class ReportDAOImpl implements ReportDAO {
         }
         return false;
     }
+
+
+    @Override
+    public Report checkReport(int reportId) {
+        String sql = "SELECT r.*, " +
+                "u1.username AS reporter_name, " +
+                "p.caption, p.image_url, " +
+                "u2.username AS reported_username " +
+                "FROM reports r " +
+                "JOIN users u1 ON r.reporter_id = u1.id " +
+                "LEFT JOIN posts p ON r.post_id = p.id " +
+                "LEFT JOIN users u2 ON r.reported_user_id = u2.id " +
+                "WHERE r.post_id = ? LIMIT 1";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, reportId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Report r = new Report();
+                    r.setId(rs.getInt("id"));
+                    r.setReporter_id(rs.getInt("reporter_id"));
+
+                    int postId = rs.getInt("post_id");
+                    if (!rs.wasNull()) r.setPost_id(postId);
+
+                    int reportedUserId = rs.getInt("reported_user_id");
+                    if (!rs.wasNull()) r.setReporter_user_id(reportedUserId);
+
+                    r.setReason(rs.getString("reason"));
+                    r.setCreated_at(rs.getTimestamp("created_at"));
+                    r.setReporter_name(rs.getString("reporter_name"));
+                    r.setPost_caption(rs.getString("caption"));
+                    r.setPost_image_url(rs.getString("image_url"));
+                    r.setReportedUsername(rs.getString("reported_username"));
+                    return r;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null; // Trả về null nếu không tìm thấy bản ghi tố cáo nào trùng ID
+    }
 }

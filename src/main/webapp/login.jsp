@@ -171,6 +171,20 @@
         </div>
     </div>
 
+
+
+    <%-- ĐOẠN CODE HIỂN THỊ THÔNG BÁO KHÓA TÀI KHOẢN --%>
+    <%
+        String errorParam = request.getParameter("error");
+        if ("locked".equals(errorParam)) {
+    %>
+    <div style="color: red; background-color: #ffe6e6; border: 1px solid red; padding: 10px; margin-bottom: 15px; border-radius: 4px; text-align: center; font-weight: bold;">
+        Tài khoản của bạn đã bị khóa do vi phạm quy chuẩn cộng đồng!
+    </div>
+    <%
+        }
+    %>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

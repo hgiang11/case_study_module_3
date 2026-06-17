@@ -230,4 +230,61 @@ public class UserDAOImpl implements igmini.dao.UserDAO {
             return false;
         }
     }
+
+
+    @Override
+    public List<User> getSuggestedUsers(int currentUserId) {
+        List<User> list = new ArrayList<>();
+        // Câu lệnh SQL lấy ra 5 người dùng khác trên hệ thống
+        String sql = "SELECT id, username, avatarUrl FROM users WHERE id != ? LIMIT 5";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, currentUserId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    User u = new User();
+                    u.setId(rs.getInt("id"));
+                    u.setUsername(rs.getString("username"));
+                    u.setAvatarUrl(rs.getString("avatarUrl"));
+                    list.add(u);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+
+
+    public boolean adminUpdateUserFull(int id, String username, String email, String role, boolean isActive, String newPassword) {
+        boolean updatePassword = (newPassword != null && !newPassword.trim().isEmpty());
+
+        String sql = updatePassword
+                ? "UPDATE users SET username = ?, email = ?, password = ? WHERE id = ?"
+                : "UPDATE users SET username = ?, email = ? WHERE id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, username);
+            ps.setString(2, email);
+
+            if (updatePassword) {
+                String hashedPassword = org.mindrot.jbcrypt.BCrypt.hashpw(newPassword, org.mindrot.jbcrypt.BCrypt.gensalt());
+                ps.setString(3, hashedPassword);
+                ps.setInt(4, id);
+            } else {
+                ps.setInt(3, id);
+            }
+
+            int rows = ps.executeUpdate();
+            return rows > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
