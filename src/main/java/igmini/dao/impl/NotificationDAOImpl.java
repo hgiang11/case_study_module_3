@@ -160,7 +160,7 @@ public class NotificationDAOImpl implements NotificationDAO {
         String sqlSelectOwner = "SELECT user_id FROM posts WHERE id = ?";
 
         String sqlInsertNoti = "INSERT INTO notifications (user_id, sender_id, type, post_id, content, is_read, created_at) " +
-                "VALUES (?, NULL, ?, NULL, ?, 0, NOW())";
+                "VALUES (?, NULL, ?, ?, ?, 0, NOW())";
 
         try (Connection conn = DBConnection.getConnection()) {
             conn.setAutoCommit(false);
@@ -178,7 +178,8 @@ public class NotificationDAOImpl implements NotificationDAO {
                 try (PreparedStatement psInsert = conn.prepareStatement(sqlInsertNoti)) {
                     psInsert.setInt(1, postOwnerId);
                     psInsert.setString(2, type);
-                    psInsert.setString(3, content);
+                    psInsert.setInt(3, postId);
+                    psInsert.setString(4, content);
 
                     int rows = psInsert.executeUpdate();
                     conn.commit();
@@ -189,6 +190,11 @@ public class NotificationDAOImpl implements NotificationDAO {
             conn.rollback();
         } catch (Exception e) {
             e.printStackTrace();
+
+
+
+
+
         }
         return false;
     }

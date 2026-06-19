@@ -22,24 +22,42 @@
           for (Notification n : notiList) {
 
             // 🚨 TRƯỜNG HỢP 1: THÔNG BÁO TỪ HỆ THỐNG / ADMIN (Bảo mật tuyệt đối danh tính)
-            if ("SYSTEM_DELETE".equals(n.getType()) || n.getSenderId() == 0) {
+            if ("SYSTEM_DELETE".equals(n.getType()) || "REPORT".equals(n.getType()) || n.getSenderId() == 0) {
+
+              // Tùy biến màu sắc giao diện theo từng loại hình phạt
+              String bgColor = "#fff2f2"; // Đỏ nhạt cho xóa bài
+              String iconColor = "text-danger";
+              String badgeText = "Ban quản trị hệ thống";
+
+              if ("REPORT".equals(n.getType())) {
+                bgColor = "#fff9e6"; // Vàng nhạt cảnh báo cho bài viết bị báo cáo
+                iconColor = "text-warning";
+                badgeText = "Cảnh báo hệ thống";
+              }
       %>
-      <div class="p-3 d-flex align-items-center justify-content-between border-bottom <%= n.isRead() ? "" : "bg-light fw-bold" %>" style="background-color: #fff2f2;">
+      <div class="p-3 d-flex align-items-center justify-content-between border-bottom <%= n.isRead() ? "" : "bg-light fw-bold" %>" style="background-color: <%= bgColor %>;">
         <div class="d-flex align-items-center gap-3">
-          <div style="width: 45px; height: 45px; border-radius: 50%; overflow:hidden; background: #ffe3e3; display:flex; align-items:center; justify-content:center;">
-            <i class="fas fa-user-shield text-danger" style="font-size: 20px;"></i>
+          <div style="width: 45px; height: 45px; border-radius: 50%; overflow:hidden; background: #fff; display:flex; align-items:center; justify-content:center; border: 1px solid #eee;">
+            <i class="fas fa-user-shield <%= iconColor %>" style="font-size: 20px;"></i>
           </div>
 
           <div>
-            <span class="text-danger fw-bold">Ban quản trị hệ thống</span>
+            <span class="<%= iconColor %> fw-bold"><%= badgeText %></span>
             <div class="text-dark small my-1"><%= n.getContent() != null ? n.getContent() : "" %></div>
             <div class="text-muted small fw-normal">
               <%= n.getCreatedAt() != null ? n.getCreatedAt().toString().substring(0, 16) : "" %>
             </div>
           </div>
         </div>
+
+        <%-- Nếu chỉ là cảnh báo REPORT (bài viết chưa bị xóa), vẫn cho user bấm vào xem lại bài viết của họ --%>
+        <% if ("REPORT".equals(n.getType()) && n.getPostId() != null) { %>
+        <a href="${pageContext.request.contextPath}/report?id=<%= n.getPostId() %>" class="btn btn-sm btn-outline-warning rounded-pill">Xem bài</a>
+        <% } %>
       </div>
       <%
+
+
       } else {
         // 👥 TRƯỜNG HỢP 2: THÔNG BÁO TỪ NGƯỜI DÙNG KHÁC (LIKE, COMMENT, FOLLOW)
       %>
